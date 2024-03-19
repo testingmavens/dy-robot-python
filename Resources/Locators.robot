@@ -1,0 +1,501 @@
+*** Variables ***
+# 02_Checkout
+${checkout_signin_l}                         css:.express-checkout div+.btn-primary
+${checkout_email_l}                          css:#email
+${checkout_pwd_l}                            css:#password
+${checkout_signin_submit_l}                  css:.submit-customer-login
+${checkout_signin_email_l}                   css:.shipping-email-text
+${checkout_info_modal_nr_l}                  css:.checkout-right-container .footer-item
+${checkout_info_modal_show_l}                css:div#checkoutfooterModal.show
+${checkout_info_modal_title_l}               css:div#checkoutfooterModal.show h4
+${checkout_info_modal_close_l}               css:.show button.close svg
+${checkout_coupon_applied_l}                 css:.d-none .coupon-applied-block
+${checkout_summary_subtotal_l}               css:.d-none .sub-total
+${checkout_summary_product_p_l}              css:.d-none .line-item-total-price-amount
+${checkout_summary_tax_total_l}              css:.d-none .tax-total
+${checkout_summary_descript_l}               css:.d-none .line-product-description
+${checkout_summary_size_l}                   xpath://*[@class="d-none d-lg-block"]//p[contains(.,'Size')]
+${checkout_summary_qty_l}                    xpath://*[@class="d-none d-lg-block"]//p[contains(.,'Qty')]
+
+# Get The First Look
+${gtfl}                                      css:.subscribe-email-heading
+${gtfl_close}                                css:#emailDialogSignUp .icon
+
+# Cookies
+${cookies_accept}                            css:#consent_prompt_submit
+${cookies_accept_xp}                         xpath://div[@class='privacy_prompt']//div[@class='close_btn_thick']
+#${cookies_accept}                            css:.consent-tracking-content .affirm
+
+#Payment
+${card_number}                               css:#cardNumber
+${name_field}                                css:#cardOwner
+${expiration_month_label}                    css:.selectric-expirationMonth .label
+${expiration_month}                          css:.selectric-expirationMonth li[data-index="3"]
+${expiration_year_label}                     css:.selectric-expirationYear .label
+${expiration_year}                           css:.selectric-expirationYear li[data-index="3"]
+${security_code}                             css:#securityCode
+${payment_section_l}                         css:.card #paymentSection
+${payment_submit_cc_l}                       css:#showSubmitPayment
+${payment_submit_cceu_l}                     css:#btnPay
+${payment_submit_paypal_l}                   css:#payPalOption .btn
+${payment_submit_zero_order_l}               css:#showSubmitPayment .js-gc-fully-paid-cta
+${payment_preselected_cc_l}                  css:#creditCardLink[aria-expanded="true"]
+${payment_hide_paypal_l}                     css:#paymentSection #payPalLink
+${payment_hide_affirm_l}                     css:#paymentSection #affirmLink
+${payment_add_new_card_l}                    css:.billing-add-payment
+${payment_ShipInfo_email_l}                  css:.summary-email
+${payment_ShipInfo_fn_l}                     css:.shipping-wrapper .firstName
+${payment_ShipInfo_ln_l}                     css:.shipping-wrapper .lastName
+${payment_ShipInfo_addr1_l}                  css:.shipping-wrapper .address1
+${payment_ShipInfo_addr2_l}                  css:.shipping-wrapper .address2
+${payment_ShipInfo_zip_l}                    css:.shipping-wrapper .postalCode
+${payment_ShipInfo_phone_l}                  css:.shipping-wrapper .shipping-phone
+${payment_ShipInfo_method_l}                 css:.shipping-wrapper .shipping-method-title
+${payment_ShipInfo_edit_l}                   css:.shipping-summary .back-to-shipping-address
+${payment_nr_empty_err_l}                    css:#giftCertID+label+div
+${payment_pin_empty_err_l}                   css:#giftCertPin+label+div
+${payment_cc_nr_empty_err_l}                 css:#cardNumber+label+div
+${payment_cc_owner_empty_err_l}              css:#cardOwner+label+div
+${payment_cc_exp_m_empty_err_l}              css:[class*='expirationMonth'] .invalid-feedback
+${payment_cc_exp_y_empty_err_l}              css:[class*='expirationYear'] .invalid-feedback
+${payment_cc_cvv_empty_err_l}                css:#securityCode+label+div
+${pay_bill_fn_empty_err_l}                   css:#billingFirstName+label+div
+${pay_bill_ln_empty_err_l}                   css:#billingLastName+label+div
+${pay_bill_addr_empty_err_l}                 css:#billingAddressOne+label+div
+${pay_bill_city_empty_err_l}                 css:#billingAddressCity+label+div
+${pay_bill_state_empty_err_l}                css:[class*='billing_addressFields_state'] .invalid-feedback
+${pay_bill_zip_empty_err_l}                  css:#billingZipCode+label+div
+${bill_city_invalid_err_l}                   css:#billingAddressCity+label+div
+${bill_zip_invalid_err_l}                    css:#billingZipCode+label+div
+${billing_city}                              css:#billingAddressCity
+${billing_zip}                               css:#billingZipCode
+${billing_error_message_text}                css:#paymentSection .error-message-text
+${payment_gcn_l}                             css:#giftCertID
+${payment_pin_l}                             css:#giftCertPin
+${pay_promo_empty_err_l}                     css:.d-none.d-lg-block .promo-code-error
+${pay_gift_card_area_l}                      css:a[href="#giftCardBlockInner"]
+${pay_gift_card_expanded_l}                  css:div.show#giftCardBlockInner
+${pay_gift_card_apply_l}                     css:#add-gift-card-btn
+${pay_gift_card_success_l}                   css:.gift-payment-accordion-text
+${pay_gift_card_err_l}                       css:.giftcard-error.d-none
+${pay_gift_card_remove_l}                    css:.remove-giftcard-paymentinstrument
+${pay_add_promo_code_l}                      css:.d-none.d-lg-block #add-promo-code-btn
+${pay_promo_code_title_l}                    css:#summaryCodeBlockInner .summary-accordion-promo-title
+${pay_promo_code_input_l}                    css:.d-none.d-lg-block input#promoCode
+${billing_fn_l}                              css:#billingFirstName
+${billing_same_as_ship_l}                    css:label[for="useDefaultShipping"]
+
+##Billing Page
+${billing_email}                            css:.billing-address-block .email
+${billing_fn}                               css:#billingFirstName
+${billing_ln}                               css:#billingLastName
+${billing_phone}                            css:.billing-address-block .phone
+${billing_address_one}                      css:#billingAddressOne
+${billing_address_two}                      css:#billingAddressTwo
+${billing_city}                             css:#billingAddressCity
+${billing_state}                            css:.#selectric-billingState
+${billing_state_lbl}                        css:.billing-address-block .selectric-shippingState .label
+${billing_zip}                              css:#billingZipCode
+
+###Shipping Page- US, CN
+${shipping_stage}                            css:[data-checkout-stage="shipping"]
+${shipping_email}                            css:#email-guest-subscribe
+${shipping_fn}                               css:#shippingFirstNamedefault
+${shipping_ln}                               css:#shippingLastNamedefault
+${shipping_phone}                            css:#shippingPhoneNumberdefault
+${shipping_address_one}                      css:#shippingAddressOnedefault
+${shipping_address_two}                      css:input.shippingAddressTwo
+${shipping_city}                             css:#shippingAddressCitydefault
+#${shipping_state}                           css:#shippingStatedefault
+${shipping_state}                            css:.selectric-shippingState
+${shipping_state_lbl}                        css:.shipping-address-block .selectric-shippingState .label
+${shipping_zip}                              css:#shippingZipCodedefault
+${submit_shipping_l}                         css:[value='submit-shipping']
+${shipping_show_verify_l}                    css:div.show#showVerifiedAddressesModal h4
+${shipping_address_zero_l}                   css:label[for="address-0"]
+${shipping_address_one_l}                    css:#address-1
+${shipping_save_selected_add}                css:#saveSelectedAddress
+${shipping_2_day_del_l}                      xpath://*[@id="dwfrm_shipping"]//span[contains(.,'2-day')]/span
+${shipping_overnight_del_l}                  xpath://*[@id="dwfrm_shipping"]//span[contains(.,'Overnight')]/span
+${shipping_standard_del_l}                   xpath://*[@id="dwfrm_shipping"]//span[contains(.,'Standard')]/span
+${shipping_usps_del_l}                       xpath://*[@id="dwfrm_shipping"]//span[contains(.,'USPS')]/span
+${shipping_selected_shipping_l}              css:.shipping-method-list .selected
+${shipping_sale_shipping_l}                  css:.selected .sale-price
+${shipping_selected_del_l}                   css:.selected [checked="checked"]+label .display-name
+${shipping_email_empty_err_l}                css:#shippingEmailInvalidMessage
+${shipping_fn_empty_err_l}                   css:#defaultFirstName
+${shipping_ln_empty_err_l}                   css:#defaultLastName
+${shipping_phone_empty_err_l}                css:#defaultTelephoneNumber
+${shipping_addr1_empty_err_l}                css:#defaultAddressLine1
+${shipping_city_empty_err_l}                 css:#defaultCity
+${shipping_state_empty_err_l}                css:#defaultState
+${shipping_zip_empty_err_l}                  css:#defaultZipCode
+${dqe_enabled}                               css:.pac-container .pac-item-query
+${dqe_enabled_lbl}                           css:.pac-container .pac-item-query span
+${dqe_enabled_list}                          css:.pac-container .pac-item
+${dqe_disabled}                              css:.pac-container[style*="display: none"]
+${shipping_method_message_l}                 xpath://input[@type='radio' and contains(@id,'shippingMethod') and @checked]//parent::div//span[@class='text-muted arrival-time']
+
+
+###Billing Form - UK, FR
+${billing_fn_eu}                               css:#CheckoutData_BillingFirstName
+${billing_ln_eu}                               css:#CheckoutData_BillingLastName
+${billing_email_eu}                            css:#CheckoutData_Email
+${billing_country_eu}                          css:#BillingCountryID
+${billing_phone_eu}                            css:#shippingPhoneNumberdefault
+${billing_address_one_eu}                      css:#CheckoutData_BillingAddress1
+${billing_address_two_eu}                      css:#CheckoutData_BillingAddress2
+${billing_city_eu}                             css:#BillingCity
+${billing_zipCode_eu}                          css:#BillingZIP
+${billing_phonenumber_eu}                      css:#CheckoutData_BillingPhone
+
+###Payment Form - UK,FR
+${payment_section_header}                     xpath://h4[text()='Payment']
+${cardnumber_eu}                              css:#cardNum
+${expiry_month_eu}                            css:#cardExpiryMonth
+${expiry_year_eu}                             css:#cardExpiryYear
+${cvv_eu}                                     css:#cvdNumber
+${payment_button_eu}                          css:#btnPay
+
+
+###Billing
+${billing_same_as_shipping}                  css:#useDefaultShipping
+
+#Gift Message Section
+${gift_msg_l}                              css:a#isGiftOrder
+${gift_msg_show_l}                         css:div.show#giftMessageCollapse
+${giftRecipient_l}                         css:#giftRecipientOrder
+${giftSender_l}                            css:#giftSendersOrder
+${giftMessage_l}                           css:#giftMessageOrder
+${gift_preview_l}                          css:#previewCard
+${gift_preview_show_l}                     css:.js-gift-form-preview.d-block
+${gift_preview_rec_l}                      css:.gift-recipient-preview
+${gift_preview_sen_l}                      css:.gift-senders-preview
+${gift_preview_txt_l}                      css:.gift-message-preview
+${gifting_image_l}                      css:img[alt="Gifting image"]
+
+###Order Confirmation
+${OrderConfirmation_Page}       css:h1.order-confirmation-title
+${confirm_order_number}         css:.pt-lg-7 .order-confirmation-section .col-12:first-child span+span
+${confirm_email}                css:.pb-7 span.text-underline
+${confirm_shipping}             css:.shipping-method-title
+${confirm_first_name}           css:.shipping-wrapper .firstName
+${confirm_last_name}            css:.shipping-wrapper .lastName
+${confirm_address1}             css:.shipping-wrapper p.address1
+${confirm_address2}             css:.shipping-wrapper p.address2
+${confirm_postal}               css:.shipping-wrapper .postalCode
+${confirm_phone}                css:.shipping-wrapper .shipping-phone
+${confirm_order_total_top}      css:.grand-total-sum
+${oc_six_chars_l}               css:.passwordList .six-characters
+${oc_capital_lowercase_l}       css:.passwordList .capital-lowercase
+${oc_one_number_l}              css:.passwordList .one-number
+${oc_no_space_l}                css:.passwordList .no-spaces
+${oc_special_char_l}            css:.passwordList .special-character
+${oc_create_acc_title_l}        css:.checkout-right-container p
+${oc_create_acc_pwd_l}          css:#newPassword
+${oc_create_acc_submit_l}       css:.password-submit
+${create_acc_err_l}             css:#newPassword+label+i+div
+
+###Order confirmation EU
+${order_confirmation_header_eu}            xpath://h2[text()='Order Confirmation']
+
+###PDP
+${pdp_product_name_l}                      css:h1.product-name
+${pdp_product_subtitle_l}                  css:.product-name--subtitle
+${pdp_selected_size_l}                     css:.selected[value*='size=']
+${pdp_add_to_cart_l}                       css:.add-to-cart
+${pdp_notify_me_l}                         css:.show#notifyMeModal .btn
+${pdp_notify_me_btn_l}                     css:[data-product-type="variant"] .add-to-cart
+${pdp_notify_me_title_l}                   css:.show#notifyMeModal h4
+${pdp_notify_me_msg_l}                     css:.notify-me-result-msg
+${pdp_notify_me_fn_l}                      css:.show#notifyMeModal #firstName
+${pdp_notify_me_ln_l}                      css:.show#notifyMeModal #lastName
+${pdp_notify_me_mail_l}                    css:.show#notifyMeModal #email
+${pdp_notify_me_mail_fill_l}               css:.show#notifyMeModal #email.text-entered
+${pdp_customer_care_l}                     css:.customer-care-btn
+${pdp_customer_care_title_l}               css:.show#customerCareModal h2
+${pdp_customer_care_close_l}               css:.show#customerCareModal .close
+${pdp_size_guide_l}                        css:.js-size-chart-link
+${pdp_size_guide_close_l}                  css:.show#sizeChartModal1 .close
+${pdp_size_guide_title_l}                  css:.show#sizeChartModal1 h2
+${pdp_complimentary_links_l}               css:.complimentary-summary-links-wrapper .footer-item-links
+${pdp_designer_note_l}                     css:.description-and-detail [aria-expanded="true"]
+${pdp_care_l}                              css:[data-target="#detailsAndCare"]
+${pdp_gifting_l}                           css:[data-target="#gifting"]
+${pdp_variant_l}                           css:.attribute-variants-pdp
+${pdp_variant_title_l}                     css:.attribute-variants-pdp [data-secondarytitle]
+${pdp_price_range_l}                       css:.prices .price .range
+${pdp_price_value_l}                       css:.prices .price .value
+${pdp_underlay_l}                          css:div.underlay
+${pdp_minicart_l}                          css:.minicart .item-image
+${pdp_product_show_l}                      css:[data-action="Product-Show"]
+${pdp_wish_icon_l}                         css:.add-to-wish-list
+${pdp_ymal_title_l}                        css:h2.ymal-title
+${pdp_ymal_carousel_l}                     css:#youMayAlsoLike .slick-track .slick-active
+${pdp_emftc_title_l}                       css:h2.ymal-title-collection
+${pdp_emftc_carousel_l}                    css:#explore-more-collection .slick-active
+${pdp_trend_now_l}                         css:#bloomReachRecomendations-recentlyViewed h3
+${pdp_trend_now_carousel_l}                css:#bloomReachRecomendations-recentlyViewed .slick-active
+${pdp_selected_store_l}                    css:.pickup-in-store-btn-modal.text-underline
+${pdp_pickup_store_list_l}                 css:.store-result-item.mx-0
+${pdp_pickup_store_close_l}                css:#bopisModal .close
+${pdp_pickup_store_btn_l}                  css:.pickup-in-store-btn
+${pdp_pickup_store_zip_l}                  css:#bopisModal #zipcode
+${pdp_pickup_store_dist_l}                 css:#bopisModal .distance span
+${pdp_pickup_store_drop_l}                 css:.selectric-open .last
+${pdp_pickup_store_search_l}               css:#bopisModal .btn-search
+${pdp_pickup_search_first_res_l}           css:#bopisModal #storesList .store-result-item:nth-child(1) button
+${pdp_open_image_l}                        css:.pswp
+${pdp_total_image_l}                       css:.pdp-img-container
+${pdp_img_next_arrow_l}                    css:.pswp .pswp__button--arrow--next svg
+${pdp_img_counter_l}                       css:.pswp .pswp__counter
+${pdp_img_zoom_l}                          css:.pswp .pswp__button--zoom svg
+${pdp_img_zoom_in_l}                       css:.pswp--zoomed-in
+${pdp_img_close_l}                         css:.pswp .pswp__button--close svg
+${pdp_badge_l}                             css:.primary-images p.js-product-badge-text
+
+###Cart
+${minicart_icon_l}                           css:.d-none .minicart-link
+${minicart_view_bag_l}                       css:.view-cart-button a
+${minicart_close_l}                          css:.minicart .close
+${minicart_empty_close_l}                    css:.empty-minicart-header .close svg
+${cart_checkout_l}                           xpath:(//a[@data-event-value='continue_checkout'])[1]
+${cart_coupon_input_l}                       css:#couponCode
+${cart_coupon_submit_l}                      css:.promo-code-btn
+${cart_coupon_err_l}                         css:#couponCode+label
+${cart_page_data_action_l}                   css:[data-action="Cart-Show"]
+
+###Minicart
+${minicart_checkout_l}                         css:a[href*='checkout']
+${minicart_modal}                              css:.popover-bottom
+
+###Affirm
+${affirm_link_l}                             css:#affirmLink
+${affirm_options_l}                          css:div.show#affirmOptions
+${affirm_show_submit_l}                      css:#showSubmitPayment
+${affirm_mobile_l}                           css:[aria-label*='Mobile number']
+${affirm_phone_pin_l}                        css:input.focusable-form-field[aria-label='PIN']
+${affirm_sign_in_submit_l}                   css:form[data-testid='sign-in-form'] button[type='submit']
+${affirm_choose_pay_plan_l}                  xpath://h1[contains(.,'Choose a payment plan')]
+${affirm_choose_this_plan_l}                 css:[aria-label='Choose this plan']
+${affirm_frame_one_l}                        css:#checkout-application
+${affirm_next_l}                             css:#btnNext
+${affirm_login_l}                            css:#btnLogin
+${affirm_last4_ssn_l}                        css:[aria-label*='Last 4 of Social']
+${affirm_verify_l}                           xpath://button[contains(.,'Verify')]
+${affirm_pof_submit_l}                       css:.PaymentOptionsForm-SubmitButton button
+${affirm_review_pay_l}                       xpath://span/span[contains(.,'I have reviewed and agree to the ')]
+
+###PayPal
+${paypal_link_l}                             css:#payPalLink
+${paypal_option_l}                           css:div.show#payPalOption
+${paypal_content_l}                          css:div#paypal-content
+${paypal_email_l}                            css:#email
+${paypal_pwd_l}                              css:#password
+${paypal_consent_l}                          css:#consentButton
+${paypal_iframe_l}                           css:[id^="jsx-iframe"]
+${paypal_idntf_btn_l}                        css:#cart-paypal-button-container [id^="jsx-iframe"]
+${paypal_btn_container_l}                    css:div.paypal-button-label-container
+
+###My Account
+${my_acc_order_history_l}                    css:a.account-nav-item-link[href="/orders"]
+${my_acc_email_lbl_l}                        css:.email-address .email-title
+${my_acc_email_elm_l}                        css:.email-address
+${myA_add_addr_fn_l}                         css:.show#addAddress #firstNameModal
+${myA_add_addr_fn_err_l}                     css:.show#addAddress #firstNameModal+label+div
+${myA_add_addr_ln_l}                         css:.show#addAddress #lastNameModal
+${myA_add_addr_ln_err_l}                     css:.show#addAddress #lastNameModal+label+div
+${myA_add_addr_addr_l}                       css:.show#addAddress #address1
+${myA_add_addr_addr_err_l}                   css:.show#addAddress #address1+label+div
+${myA_add_addr_city_l}                       css:.show#addAddress #cityPopup
+${myA_add_addr_city_err_l}                   css:.show#addAddress #cityPopup+label+div
+${myA_add_addr_zip_l}                        css:.show#addAddress #zipCode
+${myA_add_addr_zip_err_l}                    css:.show#addAddress #zipCode+label+div
+${myA_add_addr_tel_l}                        css:.show#addAddress #phone
+${myA_add_addr_tel_err_l}                    css:.show#addAddress #phone+label+i+div
+${myA_add_addr_state_l}                      css:.show#addAddress .row:nth-child(5) .selectric-custom-select .label
+${myA_add_addr_state_err_l}                  css:.selectric-invalid+.invalid-feedback
+${myA_add_card_name_l}                       css:.show#addPayment #cardOwner
+${myA_add_card_nr_l}                         css:.show#addPayment #cardNumber
+${myA_add_card_fn_l}                         css:.show#addPayment #firstNameModal
+${myA_add_card_ln_l}                         css:.show#addPayment #lastNameModal
+${myA_add_card_csv_l}                        css:.show#addPayment #securityCode
+${myA_add_card_adr_l}                        css:.show#addPayment #address1
+${myA_add_card_city_l}                       css:.show#addPayment #cityPopup
+${myA_add_card_zip_l}                        css:.show#addPayment #zipCode
+${myA_add_card_tel_l}                        css:.show#addPayment #phone
+${myA_add_card_state_l}                      css:.row:nth-child(4) .selectric-custom-select
+${myA_new_addr_fn_l}                         css:.show#addAddress #firstNameModal
+${myA_new_addr_first_row_l}                  css:.address-item-detail.selected div:nth-child(1)
+${myA_new_addr_second_row_l}                 css:.address-item-detail.selected div:nth-child(2)
+${myA_new_addr_third_row_l}                  css:.address-item-detail.selected div:nth-child(3)
+${myA_new_addr_fourth_row_l}                 css:.address-item-detail.selected div:nth-child(4)
+${myA_order_details_cont_as_l}               css:.order-list-data-description .content-asset
+${myA_new_card_first_row_l}                  css:.dashboard-info+div+div+div
+${myA_new_card_row_info_l}                   css:.dashboard-info
+${myA_new_card_next_row_l}                   css:.dashboard-info+div
+${myA_new_card_city_zip_l}                   css:.dashboard-info+div+div
+${myA_add_address_cta_l}                     css:a.add-address
+${myA_add_addr_save_cta_l}                   css:.show#addAddress .btn-save
+${myA_add_show_address_cta_l}                css:.show#addAddress
+${my_account_page_l}                         css:[data-action="Account-Show"]
+${myA_first_addr_edit_l}                     css:.card-item-address .edit-address
+${myA_first_addr_remove_l}                   css:.card-item-address .remove-address
+${myA_first_addr_remove_conf_l}              css:.show#deleteAddressModal .delete-confirmation-btn
+${myA_edit_addr_save_l}                      css:.show#addAddress .btn-save
+${myA_add_payment_l}                         css:a.add-payment
+${myA_paym_make_def_l}                       css:.js-set-default-option
+${myA_paym_make_def_select_l}                css:.payment-instrument-info.selected
+${myA_remove_payment_l}                      css:.remove-payment
+${myA_add_payment_save_l}                    css:.show#addPayment .save-payment
+${myA_add_payment_cancel_l}                  css:.show#addPayment .cancel-btn
+${myA_orders_tab_l}                          css:.account-nav-item [href="/orders"]
+${myA_orders_page_l}                         css:[data-action="Order-History"]
+${myA_delete_paym_conf_l}                    css:.show#deletePaymentModal .delete-confirmation-btn
+${myA_card_owner_err_l}                      css:.show#addPayment #cardOwner+label+.invalid-feedback
+${myA_card_number_err_l}                     css:.show#addPayment #cardNumber+label+.invalid-feedback
+${myA_card_csv_err_l}                        css:.show#addPayment #securityCode+label+i+.invalid-feedback
+${myA_card_fn_err_l}                         css:.show#addPayment #firstNameModal+label+.invalid-feedback
+${myA_card_ln_err_l}                         css:.show#addPayment #lastNameModal+label+.invalid-feedback
+${myA_card_addr_err_l}                       css:.show#addPayment #address1+label+.invalid-feedback
+${myA_card_city_err_l}                       css:.show#addPayment #cityPopup+label+.invalid-feedback
+${myA_card_zip_err_l}                        css:.show#addPayment #zipCode+label+.invalid-feedback
+${myA_card_tel_err_l}                        css:.show#addPayment #phone+label+i+.invalid-feedback
+${myA_card_state_err_l}                      css:.show#addPayment .selectric-invalid+.invalid-feedback
+
+#StoreLocator
+${store_location}                           css:#store-postal-code
+${store_search_button}                      css:.btn-storelocator-search
+${store_phone_number}                       xpath:(//div[@class='card-store'])[1]//address/span/a
+${store_address}                            xpath:(//div[@class='card-store'])[1]//address
+${store_img}                                xpath:(//div[@class='card-store'])[1]//img
+${store_img_src}                            xpath://img[@alt="David Yurman - Glendale"]
+${store_form}                               css:.store-locator-forms
+${authorized_address}                       xpath://*[@id="900265"]//address
+${checkbox_boutique}                        css:#boutique
+${checkbox_retailer}                        css:[for=retailer]
+${logo_home}                                css:.logo-home-img
+${distance_dropdown_button}                 css:.selectric
+${service_ul}                               xpath://*[@id="269010"]//ul
+${view_store_button}                        xpath://*[@id="269026"]//a[contains(.,'View Store')]
+${view_store_name}                          css:.store-name
+${view_store_address}                       xpath://*[@class="store-locator-details store-bottom"]//address
+${view_store_hours}                         xpath://*[@class="store-locator-details store-bottom"]//*[@class="store-info-block store-hours store-text store-open-hours-state"]//table
+${map_pin_position}                         xpath=//div[@title="David Yurman - Glendale"]
+${map_pin_dialog}                           xpath=//div[@role="dialog"]
+${get_direction_button}                     xpath=//*[@id="269026"]//a[@class="js-get-directions btn btn-outline-primary"]
+
+
+#Homepage
+${home_minicart_l}                          css:.d-none .minicart-quantity-outer
+${home_mpopover_show_l}                     css:.popover.show
+${home_empty_minicart_l}                    css:.empty-card-title-text
+${home_minicart_qty_outer_l}                css:.d-none .minicart-quantity-outer
+${home_cart_show_l}                         css:[data-action="Cart-Show"]
+${home_login_show_l}                        css:[data-action='Login-Show']
+${home_login_icon_l}                        css:.icon-login
+${home_choose_country_l}                    css:footer #js-choosecountry
+${home_csc_popup_l}                         css:#globale_csc_popup h1
+${home_csc_popup_close_l}                   css:#globale_csc_popup #closeSign
+${home_fav_uns_l}                           css:.icon-favorite-unselected
+${home_show_wishlist_l}                     css:[data-action='Wishlist-Show']
+${home_wishlist_count_l}                    css:.js-wishlist-count
+${home_wishlist_empty_l}                    css:#empty-wishlist
+${home_wishlist_first_item_l}               css:div:nth-child(1).product-info .item-name
+${home_subscribe_submit_l}                  css:#btnSubscribeEmail svg
+${home_subscribe_send_l}                    css:.icon-arrow-circle-black
+${home_subscribe_input_l}                   css:#hpEmailSignUp
+${home_suport_col_l}                        css:div:nth-child(1).footer-item .menu-footer li a
+${home_legal_col_l}                         css:div:nth-child(2).footer-item .menu-footer li a
+${home_aboutus_col_l}                       css:div:nth-child(3).footer-item .menu-footer li a
+${cart_wishlist_list_l}                     css:.product-info .item-name
+${cart_wishlist_qv_l}                       css:#quickViewModal .product-name--title
+${instagram_icon_l}                         css:a.instagram
+${youtube_icon_l}                           css:a.youtube
+${facebook_icon_l}                          css:a.facebook
+${pinterest_icon_l}                         css:a.pinterest
+${twitter_icon_l}                           css:a.twitter
+${wechat_icon_l}                            css:a.weChat
+${tiktok_icon_l}                            css:a.tiktok
+
+#Payment Gift Card
+${gift_card_footer}                         xpath=//a[@title="Gift Cards"]
+${virtual_gift_card_img_initial_page}       xpath=//img[@alt="Send a digital gift card."]
+${physical_gift_card_img_initial_page}      xpath=//img[@alt="Shop physical gift cards."]
+${check_balance_vgc_pdp}                    css=#gc-check-balance-reset
+${check_balance_modal_gc_number}            css=#giftCertID
+${check_balance_modal_gc_pin}               css=#giftCertPin
+${check_balance_modal_gc_button}            css=#balanceCheckbtn
+${check_balance_modal_gc_balance}           css=#gcBalanceAmount
+${payment_gift_card_apply_button}           css=#add-gift-card-btn
+${payment_gift_card_expand_button}          xpath=//a[@href="#giftCardBlockInner"]
+${order_confirmation_gift_card_value}        xpath=//div[@class="js-gift-card-payments-summary"]//p[@class="text-right"]
+${order_confirmation_gift_card_text}        xpath=//div[@class="js-gift-card-payments-summary"]//p[@class="order-receipt-label"]
+
+# GIFT CARD
+${gift_card_pdp_fn}                             css:#recipientFirstName
+${gift_card_pdp_ln}                             css:#recipientLastName
+${gift_card_pdp_email}                          css:#recipientEmailAddress
+${gift_card_pdp_sender}                         css:#senderName
+${gift_card_checkout_details}                   css:.virtual-gift-text
+
+
+###02_Checkout BOPIS
+${guest_bopis_email}                            css:#guest-subscribe-store-pickup
+${guest_bopis_fn}                               css:.pickupFirstName
+${guest_bopis_ln}                               css:.pickupLastName
+${guest_bopis_phone}                            css:.pickupPhoneNumber
+
+###PDP BOPIS
+${bopis_modal}                                  css:#pickupInStore
+${store_pickup_button}                          css:.pickup-in-store-btn-modal
+${address_pickup_button}                        css:.address-pickup-btn
+
+${bopis_title}                                      css:.in-store-pickup-title-summary
+${bopis_shipping_title}                             css:.store-info-container .shipping-info-title-text
+${bopis_store_name}                                 css:.store-text .mb-0
+${bopis_store_address1}                             css:.store-text
+${bopis_store_phone}                                css:.store-text .storelocator-phone
+
+${store_locator_zipcode}                        css:#zipcode
+${store_locator_distance_btn}                   css:.distance .button
+${store_locator_distance_list}                  css:.distance .selectric-scroll .last
+${store_locator_search_btn}                     css:.btn-search
+${store_locator_available_store}                css:#storesList .store-result-item .pickup-in-store
+
+
+#Billing
+${billing_address_checkout}                     css:.billing-summary-wrapper .address-summary
+${billing_payment_method_checkout}              css:.billing-summary-wrapper .payment-summary-bottom
+
+#Login
+${sign_in_icon}                                 css:.icon-login
+${register_login_button}                        css:.login-box a[href*="register"]
+${register_create_account_button}               css:#btnRegistrationSubmit
+${register_firstname_field}                     css:#registration-form-fname
+${register_lastname_field}                      css:#registration-form-lname
+${register_email_field}                         css:#registration-form-email
+${register_confirm_email_field}                 css:#registration-form-email-confirm
+${register_password_field}                      css:#registration-form-password
+${register_confirm_password_field}              css:#registration-form-password-confirm
+${login_button}                                 css:#btnLoginSubmit
+${login_username_field}                         css:#login-form-email
+${login_password_field}                         css:#login-form-password
+${account_container}                            css:.account-container-nav
+${register_box}                                 css:.register-box
+${login_heading}                                css:.login-page-heading
+
+${logged_user_firstname_field}                  css:.card-body #firstName
+${logged_user_lastname_field}                   css:.card-body #lastName
+${logged_user_email_field}                      css:#loginInfoContainer
+
+#Register
+${register_firstname_err}                       css:#form-fname-error
+${register_lastname_err}                        css:#form-lname-error
+${register_email_err}                           css:#form-email-error
+${register_confirm_email_err}                   css:#form-email-confirm-error
+${register_password_err}                        css:#form-password-error
+${register_confirm_password_err}                css:#form-password-confirm-error
+
+
+${primary_name_locator}                       xpath://span[@class='product-name--title js-primary-title']
