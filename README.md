@@ -33,9 +33,13 @@ Run Command:
 vice:<broswer/device> --variable version:<browser-version>  --variable  platform:"<OS-Platform>" --variable shopLocale:<locale>   .\Tests\`
 
 <LT_RUN> - To run test on lamda test. - Yes/No
+
 <browser/device> -  required browser or mobile device  - chrome/firefox/safari
+
 <browser-version> - required version of browser - 17.5/17 etc
+
 <OS-Platform> - required OS - macOS Catalina/windows11/Linux etc
+
 <locale> - required location - US/UK/FR/CN
 
 To run from IDE: 
