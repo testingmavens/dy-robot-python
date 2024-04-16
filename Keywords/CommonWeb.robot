@@ -5,30 +5,29 @@ Library           OperatingSystem
 Library           XML
 Library           DateTime
 Library           String
-Library           random
+Library           OperatingSystem
+Library           JSONLibrary
+
 Resource          ../Resources/Variables.robot
 Resource          ../Keywords/Checkout.robot
-Resource          LamdaTestSetup.robot
+Resource          ../Keywords/LamdaTestSetup.robot
 
 *** Keywords ***
 Open website
-    Set Test Variable    ${run_on_LT}    yes
+    Set Test Variable    ${run_on_LT}    ${run_on_LT}
     Set Test Variable    ${product}      DY
-    Set Test Variable    ${device}       chrome
+    Set Test Variable    ${device}       ${device}
     Set Test Variable    ${product_added}    0
-    Set Test Variable    ${env}              uat
     Set Test Variable    ${available}    Not define
-    Set Test Variable    ${shopLocale}   US
+    Set Test Variable    ${shopLocale}   ${shopLocale}
     Set Library Search Order    SeleniumLibrary
-    Set Test Variable    ${URL}    ${PROD_URL}
+    Set Test Variable    ${URL}    ${UAT_URL}
     Run Keyword If    '${run_on_LT}' == 'yes'   Open Lamda Test browser
     Run Keyword If    '${run_on_LT}' == 'no'    Open Browser    ${URL}    ${device}    options=add_argument("--ignore-certificate-errors")
    #Locale setting
     Accept Cookies
     Maximize Browser Window
     Set location from ui
-
-
 
 Accept Cookies
     Run Keyword And Warn On Failure    Wait until page contains element    ${cookies_accept}    timeout=20s
@@ -157,45 +156,59 @@ Should Contain Text
 
 Set location from ui
    IF  '${shopLocale}' in ['US']
-    ${url} =  Get Location
+    Location Should Contain    uat.davidyurman.com
    ELSE IF  '${shopLocale}' in ['UK']
     Scroll Element Into View    xpath://a[text()='Choose Another Country ']
     Sleep  3s
     Scroll And Click by JS      xpath://a[text()='Choose Another Country ']
-    Sleep  3s
+    Wait Until Page Contains Element    xpath://select[@id='gle_selectedCountry']
     Select From List By Label  xpath://select[@id='gle_selectedCountry']   United Kingdom
     Click by JS     xpath://input[@data-key='SavenClose']
-    Wait Until Page Contains Element    xpath://input[@value='Continue to shop']   timeout=30s
+    Wait Until Page Contains Element    xpath://input[@value='Continue to shop']    timeout=20s
     Click by JS     xpath://input[@value='Continue to shop']
+    Wait Until Location Contains    uat.davidyurman.com/en-de/home
    ELSE IF  '${shopLocale}' in ['CN']
     Scroll Element Into View    xpath://a[text()='Choose Another Country ']
     Sleep  3s
     Scroll And Click by JS      xpath://a[text()='Choose Another Country ']
+    Wait Until Page Contains Element    xpath://select[@id='gle_selectedCountry']
     Select From List By Label  xpath://select[@id='gle_selectedCountry']   Canada
     Click by JS     xpath://input[@data-key='SavenClose']
-    Sleep  3s
+    Wait Until Page Contains Element    xpath://input[@value='Continue to shop']    timeout=20s
     Click by JS     xpath://input[@value='Continue to shop']
+    Wait Until Location Contains    uat.davidyurman.com/en-de/home
    ELSE IF  '${shopLocale}' in ['FR']
     Scroll Element Into View    xpath://a[text()='Choose Another Country ']
     Sleep  3s
     Scroll And Click by JS      xpath://a[text()='Choose Another Country ']
+    Wait Until Page Contains Element    xpath://select[@id='gle_selectedCountry']
     Select From List By Label  xpath://select[@id='gle_selectedCountry']   France
     Click by JS     xpath://input[@data-key='SavenClose']
-    Sleep  5s
+    Wait Until Page Contains Element    xpath://input[@value='Continue to shop']    timeout=20s
     Click by JS     xpath://input[@value='Continue to shop']
+    Wait Until Location Contains    uat.davidyurman.com/en-de/home
+   ELSE IF  '${shopLocale}' in ['GR']
+    Scroll Element Into View    xpath://a[text()='Choose Another Country ']
+    Sleep  3s
+    Scroll And Click by JS      xpath://a[text()='Choose Another Country ']
+    Sleep  3s
+    Select From List By Label  xpath://select[@id='gle_selectedCountry']   Germany
+    Click by JS     xpath://input[@data-key='SavenClose']
+    Wait Until Page Contains Element    xpath://input[@value='Continue to shop']    timeout=30s
+    Click by JS     xpath://input[@value='Continue to shop']
+#    Wait Until Location Contains    uat.davidyurman.com/en-de/home
+   ELSE IF  '${shopLocale}' in ['IT']
+    Scroll Element Into View    xpath://a[text()='Choose Another Country ']
+    Sleep  3s
+    Scroll And Click by JS      xpath://a[text()='Choose Another Country ']
+    Sleep  3s
+    Select From List By Label  xpath://select[@id='gle_selectedCountry']   Italy
+    Click by JS     xpath://input[@data-key='SavenClose']
+    Wait Until Page Contains Element    xpath://input[@value='Continue to shop']    timeout=30s
+    Click by JS     xpath://input[@value='Continue to shop']
+#    Wait Until Location Contains    uat.davidyurman.com/en-de/home
    END
 
-
-Set location by url
-   IF  '${shopLocale}' in ['US']
-    Go to  https://uat.davidyurman.com/
-   ELSE IF  '${shopLocale}' in ['UK']
-    Go to  https://uat.davidyurman.com/eu/en-gb/home
-   ELSE IF  '${shopLocale}' in ['CN']
-    Go to  https://uat.davidyurman.com/ca/en/home
-   ELSE IF  '${shopLocale}' in ['FR']
-    Go to  https://uat.davidyurman.com/eu/en/home
-   END
 
 Enter text in Billing address
     [Arguments]     ${add}
@@ -227,6 +240,46 @@ Get text from form
 Scroll Page
     [Arguments]    ${x_offset}    ${y_offset}
     Execute JavaScript    window.scrollBy(${x_offset}, ${y_offset})
-     
+
+Check Subtitles Text and Visibility
+    [Arguments]    ${accordion_locator}    ${expected_titles}
+    ${li_elements}              Get WebElements                     ${accordion_locator}
+    ${actual_subtitles}         Convert WebElements to Strings      ${li_elements}
+    CommonWeb.Check Substrings in List of String       ${actual_subtitles}        ${expected_titles}
+
+Check Text Visibility in Accordion
+    [Arguments]    ${locator}    ${text_locator}
+    ${title_buttons}          Get WebElements                     ${locator}
+    FOR    ${button}    IN    @{title_buttons}
+        Click Element  ${button}
+        Wait Until Element Is Visible    ${text_locator}
+        Element Should Be Visible    ${text_locator}
+        Click Element  ${button}
+    END
+
+Click on Footer Link
+    [Arguments]    ${title}
+    Scroll Element Into View    xpath://a[contains(text(), '${title}')]
+    Click Element       xpath://a[contains(text(), '${title}')]
+
+Get text and Compare
+    [Arguments]   ${locator}   ${expected_text}
+    ${text}=    Check and Get text     ${locator}
+    Should Be Equal     ${text}    ${expected_text}
+
+Remove currency and comma from price
+    [Arguments]  ${price}
+    ${clean_price}     Remove String    ${price}           C$
+    ${clean_price}     Remove String    ${clean_price}     $
+    ${clean_price}     Remove String    ${clean_price}     €
+    ${clean_price}     Remove String    ${clean_price}     £
+    ${clean_price}     Remove String    ${clean_price}     ,
+  RETURN  ${clean_price}
+  
+  
+Close dev tools icon
+   Select Frame    xpath:(//iframe[1])[2]
+   Click by JS    xpath://div[@class='x-panel-body x-panel-body-noheader' and @id='ext-gen16']
+   Unselect Frame
 
 

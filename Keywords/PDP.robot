@@ -8,26 +8,21 @@ Resource          ../Keywords/Checkout.robot
 Open PDP for product with id
     [Arguments]    ${id}
     Go To    ${URL}${id}.html
-    Wait Until Element Is Visible    ${pdp_product_name_l}    15s    error=Product Name is not visible
+    Wait Until Element Is Visible    ${pdp_product_name_l}    3s    error=Product Name is not visible
 
 Select Size
     [Arguments]    ${size}
     Scroll Element Into View    css:button[data-attr-value='${size}']
-    Mouse Over       css:button[data-attr-value='${size}']
+    Mouse Over       css:button[data-attr-value='${size}']   
     Click Element    css:button[data-attr-value='${size}']
     Wait Until Page Contains Element    ${pdp_selected_size_l}     10s    error=Size is not visible
     Sleep    3s    #tried with waits without success; the click is too fast
-
-Check product style
-   [Arguments]  ${style}
-   Scroll Element Into View    xpath:(//li[@class='product-style-number'])[1]
-   Element Text Should Be    xpath:(//li[@class='product-style-number'])[1]    Style #${style}
-
-Check product UPC
-   [Arguments]  ${UPC}
-   Scroll Element Into View    xpath:(//li[@class='upc'])[1]
-   Sleep  1s
-   Element Text Should Be    xpath:(//li[@class='upc'])[1]     UPC ${UPC}
+#    Wait Until Page Does Not Contain Element    css:.product-name--title[style*="opacity"]     10s    error=Product Title is not visible
+#    Wait Until Element Is Visible   css:.product-name--title     10s    error=Product Title is not visible
+#    Wait Until Page Does Not Contain Element    css:.product-name--subtitle[style*="opacity"]     10s    error=Product Subtitle is not visible
+#    Wait Until Element Is Visible   css:.product-name--subtitle    10s    error=Product Subtitle is not visible
+#    Wait Until Page Does Not Contain Element    css:.js-attribute-option[style*="opacity"]     10s    error=Product Subtitle is not visible
+#    Wait Until Element Is Visible   css:.pdp-pricing-container .value    10s    error=Product Subtitle is not visible
 
 Select Color
     [Arguments]    ${color}
@@ -45,7 +40,7 @@ Wait until underlay dissapears
     Wait Until Page Does Not Contain Element    ${pdp_underlay_l}    10s    error=Underlay is still visible
 
 Verify Minicart modal is displayed
-    Wait Until Page Contains Element    ${pdp_minicart_l}     10s    error=Minicart is not visible
+    Wait Until Page Contains Element    ${pdp_minicart_l}     50s    error=Minicart is not visible
     #Wait Until Element Is Visible    ${pdp_minicart_l}     10s    error=Minicart is not visible
 
 Check that the button label is Pre-Order
@@ -74,23 +69,9 @@ Navigate to Category
 Navigate to Subcategory
     [Arguments]    ${subcategory}
     Mouse Over    css:#${category}-${subcategory}
-    Wait Until Page Contains Element    css:.show [aria-label="${category}"] li:nth-child(1).dropdown-item.level-2     5s    error=Category is not loaded
+    Wait Until Page Contains Element    css:.show [aria-label='${category}'] li:nth-child(1).dropdown-item.level-2     5s    error=Category is not loaded
     Wait Until Element Is Visible    css:.show [aria-label='${category}'] li:nth-child(1).dropdown-item.level-2     5s    error=Category is not visible
     Set Test Variable    ${subcategory}
-
-Navigate to l3 subcategory
-    [Arguments]    ${l3subcategory}
-    Wait Until Element Is Visible    css:.dropdown-menu [href*='/${category}/${subcategory}/${l3subcategory}-bracelets.html']    5s    error=Category is not visible
-    Mouse Over    css:.dropdown-menu [href*='/${category}/${subcategory}/${l3subcategory}-bracelets.html']
-    Click Element    css:.dropdown-menu [href*='/${category}/${subcategory}/${l3subcategory}-bracelets.html']
-
-Get product primary name from PDP
-    ${product_primary_name}=  Get Text    ${primary_name_locator}
-    Set Test Variable    ${product_primary_name}    ${product_primary_name}
-
-Get product secondary name
-    ${product_secondary_name}=  Get Text    ${secondary_name_locator}
-    Set Test Variable    ${product_secondary_name}   ${product_secondary_name}
 
 Click on Subcategory
     Click Element    css:#${category}-${subcategory}
@@ -99,6 +80,12 @@ Navigate and click on Subcategory
     [Arguments]    ${subcategory}
     Navigate to Subcategory    ${subcategory}
     Click on Subcategory
+
+Navigate to l3 subcategory
+    [Arguments]    ${l3subcategory}
+    Wait Until Element Is Visible    css:.dropdown-menu [href*='/${category}/${subcategory}/${l3subcategory}-${subcategory}.html']    5s    error=Category is not visible
+    Mouse Over    css:.dropdown-menu [href*='/${category}/${subcategory}/${l3subcategory}-${subcategory}.html']
+    Click Element    css:.dropdown-menu [href*='/${category}/${subcategory}/${l3subcategory}-${subcategory}.html']
 
 Click on Wish icon from PDP
     CommonWeb.Scroll And Click by JS    ${pdp_wish_icon_l}
@@ -112,18 +99,13 @@ Check if PDP is displayed correctly (general information, buttons, tabs, price)
     Run Keyword And Warn On Failure     Element Text Should Be       ${pdp_gifting_l}               ${pdp_gifting_exp}
 
 Compare the price from PLP to the one from PDP
-    ${range_available}    Run Keyword And Return Status    Wait Until Element Is Visible    ${pdp_price_range_l}    5s    Price range is not visible
-    IF    "${range_available}" == "True"
+    ${range_avalable}    Run Keyword And Return Status    Wait Until Element Is Visible    ${pdp_price_range_l}    5s    Price range is not visible
+    IF    "${range_avalable}" == "True"
         ${pdp_product_price}    Get Text    ${pdp_price_range_l}
     ELSE
         ${pdp_product_price}    Get Text    ${pdp_price_value_l}
     END
-    Run Keyword And Warn On Failure  Should Be Equal As Strings    ${pdp_product_price}    ${plp_product_price}
-
-Check if a product with no stock is displayed correctly
-    Run Keyword And Warn On Failure     Wait Until Element Is Visible    ${pdp_notify_me_btn_l}     10s    Notify Me button is not visible
-    Run Keyword And Warn On Failure     Element Text Should Be    ${pdp_notify_me_btn_l}    ${pdp_notify_me_btn_exp}
-
+    Should Be Equal As Strings    ${pdp_product_price}    ${plp_product_price}
 
 Save the product subtitle on PDP
     ${product_name_subtitle}    Get Text    ${pdp_product_subtitle_l}
@@ -139,6 +121,10 @@ Check if a product with variations is displayed correctly
         Run Keyword And Warn On Failure     Should Be Equal As Strings    ${product_name_subtitle}    ${variant_title}
     END
 
+Check if a product with no stock is displayed correctly
+    Run Keyword And Warn On Failure     Wait Until Element Is Visible    ${pdp_notify_me_btn_l}     10s    Notify Me button is not visible
+    Run Keyword And Warn On Failure     Element Text Should Be    ${pdp_notify_me_btn_l}    ${pdp_notify_me_btn_exp}
+
 Click on Notify Me button
     Click Element    ${pdp_add_to_cart_l}
     Wait Until Page Contains Element    ${pdp_notify_me_title_l}    5s    Notify Me button is not loaded
@@ -153,7 +139,9 @@ Fill in the Notify Me form
     Wait Until Page Contains Element    ${pdp_notify_me_mail_fill_l}     5s    error=Submit button is not activated
 
 Submit the Notify Me form and check the result
-    Click Element    ${pdp_notify_me_l}
+    Scroll Element Into View    ${pdp_notify_me_l}
+    Sleep  1s
+    Click by JS    ${pdp_notify_me_l}
     Wait Until Element Is Visible    ${pdp_notify_me_msg_l}     20s    error=Notify Me modal is not yet closed
     Run Keyword And Warn On Failure     Element Text Should Be    ${pdp_notify_me_msg_l}    ${pdp_notify_me_msg_exp}
 
@@ -174,10 +162,10 @@ Close the Size Guide modal
     Wait Until Element Is Not Visible    ${pdp_size_guide_title_l}    10s    error=Find the Perfect Fit modal is not yet opened
 
 Capture the product price from PDP
-    ${product_price_from_pdp} =    Get Text    ${pdp_price_value_l}
-    ${product_price_pdp}    Set Test Variable    ${product_price_from_pdp}
+    ${product_price_from_pdp}    Get Text    ${pdp_price_value_l}
+    ${product_price_pdp}    Set Test Variable    \${product_price_from_pdp}
 
-Click on image number from PDP image gallery
+Click on image nr from PDP image gallery
     [Arguments]    ${open_img}
     Click Element    css:.pdp-img-container:nth-child(${open_img}) a img
     Wait Until Element Is Visible    ${pdp_open_image_l}    10s    error=PDP image is not visible
@@ -255,52 +243,49 @@ Select available store at
     CommonWeb.Check and Click               ${store_locator_distance_btn}
     CommonWeb.Check and Click               ${store_locator_distance_list}
     CommonWeb.Check and Click               ${store_locator_search_btn}
-    Sleep  3s
-    CommonWeb.Check and Click               ${store_locator_available_store}
+    Wait Until Element Is Visible           ${store_locator_available_store}             timeout=10s        error=Store not Available at ${zip_code}
+    CommonWeb.Scroll And Click by JS        ${store_locator_available_store}
+    CommonWeb.Scroll To Top
 
 
 Open BOPIS modal
     Scroll Element Into View    ${store_pickup_button}
-    Check and Click                         ${store_pickup_button}
+    Click Element                         ${store_pickup_button}
     Wait Until Element Is Visible           ${bopis_modal}             timeout=5s        error=BOPIS Modal is not visible
-
+    
 Select Address Pickup
-    Check and Click                         ${address_pickup_button}
+    Scroll Element Into View    ${address_pickup_button}
+    Click Element                         ${address_pickup_button}
     Wait Until Element Is Enabled           ${address_pickup_button}        timeout=5s
 
 Wait Until Minibag is Close
     Wait Until Element is not Visible       ${minicart_modal}         timeout=5s
+    
+Capture product primary name from PDP
+    Scroll Element Into View    xpath://span[@class='product-name--title js-primary-title']
+    ${PDP_product_primary_name}    Get Text    xpath://span[@class='product-name--title js-primary-title']
+    ${PDP_product_primary_name}    Set Test Variable    ${PDP_product_primary_name}
 
-Close mini cart modal
-    Click Element    xpath://div[@class='minicart-close-btn']/button
+Capture product secondary name from PDP
+    Scroll Element Into View    xpath://span[@class='product-name--subtitle js-secondary-title']
+    ${PDP_product_secondary_name}    Get Text    xpath://span[@class='product-name--subtitle js-secondary-title']
+    ${PDP_product_secondary_name}    Set Test Variable    ${PDP_product_secondary_name}
 
-Check Info Texts
-        Run Keyword And Warn On Failure    Element Text Should Be    xpath:(//a[@data-content='two-day-shipping'])[1]   ${checkout_info_2day_shipping_message}
-        CommonWeb.Check and Click    xpath:(//a[@data-content='two-day-shipping'])[1]
-        Wait Until Page Contains Element    ${checkout_info_modal_show_l}    10s    Info Modal is not visible
-        Wait Until Element Is Visible    ${checkout_info_modal_title_l}    10s    Info Modal is not visible
-        Run Keyword And Warn On Failure    Element Text Should Be    ${checkout_info_modal_title_l}   ${checkout_info_2day_shipping_title}
-        Run Keyword And Warn On Failure    Element Text Should Be    xpath://div[@class='order-summary-content']   ${checkout_info_2day_shipping_message}
-        CommonWeb.Check and Click    ${checkout_info_modal_close_l}
-        Wait Until Element Is Not Visible    ${checkout_info_modal_title_l}    10s    Info Modal is still visible
+Capture product price from PDP
+   ${PDP_product_price}    Get Text    xpath:(//span[@class='value'])[1]
+   Set Global Variable    ${PDP_product_price}   ${PDP_product_price}
 
-        Run Keyword And Warn On Failure    Element Text Should Be    xpath:(//a[@data-content='30-day-returns'])[1]   ${checkout_info_30day_returns_title}
-        CommonWeb.Check and Click    xpath:(//a[@data-content='30-day-returns'])[1]
-        Wait Until Page Contains Element    ${checkout_info_modal_show_l}    10s    Info Modal is not visible
-        Wait Until Element Is Visible    ${checkout_info_modal_title_l}    10s    Info Modal is not visible
-        Run Keyword And Warn On Failure    Element Text Should Be    ${checkout_info_modal_title_l}   ${checkout_info_boutique_pick_up_title}
-        Run Keyword And Warn On Failure    Element Text Should Be    xpath://div[@class='order-summary-content']   ${checkout_info_boutique_pickup_message}
-        CommonWeb.Check and Click    ${checkout_info_modal_close_l}
-        Wait Until Element Is Not Visible    ${checkout_info_modal_title_l}    10s    Info Modal is still visible
+Click size guide
+   Scroll Element Into View    xpath://a[@data-target='#sizeChartModal1']
+   Click Element    xpath://a[@data-target='#sizeChartModal1']
+   
+Check whether size guide is opened
+    Page Should Contain Element    xpath:(//div[@class='modal-content'])[1]
+   
+Close size guide
+    Scroll Element Into View    xpath:(//button[@aria-label='Close'])[1]
+    Click Element    xpath:(//button[@aria-label='Close'])[1]
 
-
-Check currency in PDP Page
-     ${element_text}    Get Text    xpath:(//span[@class='value' and @content])[2]
- IF  '${shopLocale}' in ['US']
-    Should Contain Text   ${element_text}    $
- ELSE IF '${shopLocale}' in ['CN']
-    Should Contain Text   ${element_text}    C$
- ELSE IF '${shopLocale}' in ['UK']
-    Should Contain Text   ${element_text}    £
-ELSE IF '${shopLocale}' in ['FR']
-    Should Contain Text   ${element_text}    €
+Click Pre order Button from PDP
+    Scroll To Element    xpath://button[text()='Pre-order']
+    Click Element    xpath://button[text()='Pre-order']

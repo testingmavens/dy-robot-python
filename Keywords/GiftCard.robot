@@ -9,7 +9,7 @@ Fill Virtual GC PDP
     CommonWeb.Check and Input text          ${gift_card_pdp_fn}                     ${FIRST_NAME} 
     CommonWeb.Check and Input text          ${gift_card_pdp_ln}                     ${LAST_NAME} 
     CommonWeb.Check and Input text          ${gift_card_pdp_email}                  ${REGISTERED_email} 
-    CommonWeb.Check and Input text          ${gift_card_pdp_sender}                 ${ADDRESS2} 
+    CommonWeb.Check and Input text          ${gift_card_pdp_sender}                 ${ADDRESS2}
 
 
 Check VGC fields on the checkout
@@ -17,7 +17,9 @@ Check VGC fields on the checkout
     ${actual_services}      Convert WebElements to Strings      ${li_elements}
     CommonWeb.Check Substrings in List of String       ${actual_services}        ${expected_vdg_values}
 
-
+Enter Gift message
+     Scroll Element Into View    xpath://textarea[@id='giftMessageOrder']
+     Input Text    //textarea[@id='giftMessageOrder']    Happy wishes
 Get An Gift Card with Balance
     Open Gift Card PDP 
     Go to Check Balance modal
@@ -28,15 +30,19 @@ Get An Gift Card with Balance
         ${actual_balance}           Get Gift Card Balance from Check Balance Modal    ${gift_card_number}     ${gift_card_pin}
         Run Keyword If                          ${actual_balance} > 0       Return From Keyword         ${gift_card_number}     ${gift_card_pin}
     END
-    RETURN    ${None}    ${None}
+    [Return]    ${None}    ${None}
 
 
 Add Perpetual Gift Card
     Scroll Element Into View    ${payment_gift_card_expand_button}
-    Check and Click         ${payment_gift_card_expand_button}
-    Check and Input text    ${check_balance_modal_gc_number}        ${gift_card_number_100}         GC Number
-    Check and Input text    ${check_balance_modal_gc_pin}           ${gift_card_pin_100}            GC Pin
-    Check and Click         ${payment_gift_card_apply_button}       Apply Gift Card Button
+    Click Element         ${payment_gift_card_expand_button} 
+    Scroll Element Into View    ${check_balance_modal_gc_number}
+    Input text    ${check_balance_modal_gc_number}        ${gift_card_number_100}         GC Number
+    Scroll Element Into View    ${check_balance_modal_gc_pin}
+    Input text    ${check_balance_modal_gc_pin}           ${gift_card_pin_100}            GC Pin
+    Scroll Element Into View    ${payment_gift_card_apply_button}
+    Sleep  2s
+    Click Element         ${payment_gift_card_apply_button}
 
 Open Gift Card PDP
     [Arguments]    ${is_virtual}=True
@@ -55,11 +61,11 @@ Get Gift Card Balance from Check Balance Modal
     ${element_exists}                   Check Element Existence             ${check_balance_modal_gc_balance}
     IF      ${element_exists}
             ${balance}    Check and Get text    ${check_balance_modal_gc_balance}    Gift Card Balance
-            ${amount_number}    Convert String with Currency to Number   ${balance}
+            ${amount_number}    Convert String with Currency to Number   ${balance}    
     ELSE
             ${amount_number}    Set Variable    0
     END
-    RETURN    ${amount_number}
+    [Return]    ${amount_number}
 
 
 Select Amount Gift Card PDP
@@ -86,17 +92,6 @@ Select an Available Physical Gift Card PDP
     END
     Run Keyword If    not ${gc_found}    Fail    No available physical gift card found
 
-Open Gift Card PDP from suggested pages
-    Scroll To Bottom
-    Check and Click                         ${gift_card_footer}
-    Wait Until Page Contains Element         ${virtual_gift_card_img_initial_page}
-
 Check Gift card page location
     ${url}  Get Location
     Wait Until Location Contains        /gifts/gift-cards   timeout=10s   message= Gift Card Page Not loaded
-
-Add Physical Gift Card
-    Check and Click         ${payment_gift_card_expand_button}
-    Check and Input text    ${check_balance_modal_gc_number}        ${gift_card_number_100}         GC Number
-    Check and Input text    ${check_balance_modal_gc_pin}           ${gift_card_pin_100}            GC Pin
-    Check and Click         ${payment_gift_card_apply_button}       Apply Gift Card Button

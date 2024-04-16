@@ -4,8 +4,8 @@ Resource  ../Resources/Variables.robot
 Resource  ../Keywords/CommonWeb.robot
 
 *** Variables ***
-${BROWSER}          chrome
-&{options}          browserName=${device}     platform=${platform}       version=${version}        name=DY Lamda Test Run
+${BROWSER}          ${device}
+&{options}          browserName=${device}     platform=${platform}       name=DY Lamda Test Run
 &{CAPABILITIES}     LT:Options=&{options}
 ${REMOTE_URL}       http://${LT_USERNAME}:${LT_ACCESS_KEY}@hub.lambdatest.com/wd/hub
 ${TIMEOUT}          3000

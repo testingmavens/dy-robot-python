@@ -3,14 +3,33 @@
 ${DEV_URL}                              https://storefront:TwistedCable23@dev.davidyurman.com/
 ${UAT_URL}                              https://dytest:TwistedCable23@uat.davidyurman.com/
 ${PROD_URL}                             https://davidyurman.com/
-${EPS_URL}                              https://uat-employeepurchase.davidyurman.com/
 ${cookies_closed}                       ${False}
 ${GTFL_already_closed}                  false
+${LT_USERNAME}                              shariq.mohammed
+${LT_ACCESS_KEY}                            PDKXggfbp3fFLe18WAr0H4eQ3Hm8qBl4hDniEHNEnawMNy2NWa
 
 #${dev_preorder_product}                 B25992M88BFG
 #${uat_preorder_product}                 192740696091
 
 # Desktop
+&{win11}                                os=Windows    osVersion=11
+# Mobile
+&{iPhone14}
+...                                     osVersion=16
+...                                     deviceName=iPhone 14 Pro Max
+...                                     local=false
+...                                     disableCorsRestrictions=true
+...                                     preventCrossSiteTracking=false
+&{iPhone13}
+...                                     osVersion=15
+...                                     deviceName=iPhone 13 Mini
+...                                     local=false
+...                                     disableCorsRestrictions=true
+...                                     preventCrossSiteTracking=false
+&{SamsungS22}                           osVersion=12.0    deviceName=Samsung Galaxy S22 Ultra    local=false    interactiveDebugging=true
+&{SamsungS21}                           osVersion=11.0    deviceName=Samsung Galaxy S21    local=false
+# Tablet
+&{iPad}                                 osVersion=15    deviceName=iPad 9th    local=false
 # Browsers
 ${chrome}                               chrome
 ${safari}                               safari
@@ -21,37 +40,49 @@ ${samsung}                              samsung
 
 # Login
 
-# SHIPPING DATA
-${REGISTERED_email}                     johnDoeTm@mailsac.com
-${REGISTERED_pwd}                       P@ssword00
-${GUEST_email}                          johnDoeTMGuest@mailsac.com
-${PASSWORD}                             P@ssword00
-${FIRST_NAME}                           JohnAutomation
-${Reg_FIRST_NAME}                       automation-fn
-${LAST_NAME}                            Doe
-${Reg_LAST_NAME}                        automation-ln
-${PHONE}                                2143236555
-${PHONE_two}                            92345678929
-${ADDRESS}                              123 William Street
-${Reg_ADDRESS}                          6201 baird ave
-${ADDRESS_two}                          123 Main St
-${ADDRESS2}                             Fake Address
-${ADDRESS2_two}                         Second Fake Address
-${CITY}                                 New York
-${STATE}                                NY
-${ZIP}                                  91335
-${ZIP_two}                              90022
-${ZIP_two}                              10038-3804
-${invalid_email}                        mail@mail.
-${invalid_phone}                        92345678
-${invalid_city}                         a
-${invalid_zip}                          1%a
-${shipping_method_overnight}            Overnight
-${shipping_method_2D}                   2 Day
-${complimentary_shipping}               Complimentary
+## SHIPPING DATA
+${REGISTERED_email}                     ana.nanu+1@gmail.com
+${REGISTERED_pwd}                       Test*1234
+#${REGISTERED_email_2}                   ana.nanu10@ro.osf-global.com
+#${REGISTERED_pwd_2}                     Test*1234Test*1234
+#${REG_affirm_account}                   ana.nanu20@ro.osf-global.com
+#${REG_affirm_pwd}                       Test*1234Test*1234
+#${reg_29_name}                          Auto Test
+#${reg_29_password}                      Test*1234
+#${reg_29_address}                       123 Main St
+#${reg_29_address_1}                     999 Main St
+#${reg_29_city}                          Los Angeles
+#${reg_29_city_1}                        New York
+#${reg_29_state}                         California
+#${reg_29_state_1}                       New York
+#${reg_29_zip}                           91335
+#${reg_29_zip_1}                         91338
+#${reg_29_tel}                           214-323-6591
+#${reg_29_tel_1}                         214-323-4578
+#${GUEST_email}                          ana.nanu@osf.digital
+#${GUEST_second_email}                   ana.nanu100@ro.osf-global.com
+${FIRST_NAME}                           Ana
+#${Reg_FIRST_NAME}                       automation-fn
+#${LAST_NAME}                            Nanu
+#${Reg_LAST_NAME}                        automation-ln
+#${PHONE}                                214-323-6559
+#${PHONE_two}                            214-323-6543
+#${ADDRESS}                              123 William Street
+#${Reg_ADDRESS}                          6201 baird ave
+#${ADDRESS_two}                          123 Main St
+${ADDRESS2}                         Second Fake Address
+#${CITY}                                 New York
+#${STATE}                                NY
+#${ZIP}                                  91335
+#${ZIP_two}                              90022
+#${ZIP_two}                              10038-3804
+#${invalid_email}                        mail@mail.
+#${invalid_phone}                        92345678
+#${invalid_city}                         a
+#${invalid_zip}                          1%a
 
 # Payment
-${visa_number}                          4695370000000009
+${visa_number}                          4111111111111111
 ${mastercard_number}                    5387200000000008
 ${discover_number}                      6011500080009080
 ${discover_2_number}                    6445644564456445
@@ -87,12 +118,10 @@ ${invalid_pin}                          1234
 #${affirm_phone_no}                      2025550199
 ${affirm_phone_no}                      2143236555
 ${affirm_pin_no}                        123456
-${REG_affirm_account}                   ana.nanu20@ro.osf-global.com
-${REG_affirm_pwd}                       Test*1234Test*1234
 
 ###Paypal
-${PAYPAL_user}                  Dypaypalsandbox_buyer3@davidyurman.com
-${PAYPAL_pass}                  Yurman2017!
+${PAYPAL_user}                  ana.nanu10@ro.osf-global.com
+${PAYPAL_pass}                  Test*test
 
 ###Order Confirmation
 @{invalid_pwds}
@@ -110,13 +139,13 @@ ${valid_password}                       Test#1234
 ...    United Kingdom
 ...    France
 
-###02_Checkout
+###Checkout
 ${checkout_info_2day_shipping_title}      Complimentary 2-day shipping
 ${checkout_info_30day_returns_title}      Complimentary 30-day returns
 ${checkout_info_boutique_pick_up_title}   Complimentary boutique pick up
 ${checkout_info_2day_shipping_message}    Your order should arrive in two business days if placed by 3PM ET on weekdays or if placed by 12PM ET on Saturday. Exclusions apply, including orders that ship via USPS.
 ...                                       Shipping estimates are based on the day and time your order is placed (excluding holidays). You can find a delivery estimate in the shipping step of checkout. Please note: all orders are subject to processing time.
-${checkout_info_30day_return_message}     We are pleased to offer a full refund for DavidYurman.com and David Yurman store purchases returned within 30 days of their purchase date.
+${checkout_info_30day_returns_message}     We are pleased to offer a full refund for DavidYurman.com and David Yurman store purchases returned within 30 days of their purchase date.
 ...                                       All refunds will be made to the purchaser and issued to the original form of payment except cash purchases, which will be refunded by company check. Gift recipients may receive a merchandise credit.
 ...                                       Please note: Returns must be accompanied by a sales receipt or packing slip and received unaltered, unworn and in sellable condition. Some exclusions may apply.
 
@@ -124,9 +153,10 @@ ${checkout_info_boutique_pickup_message}  Our in-store pickup service allows you
 ...                                       Our online store locator indicates if a David Yurman boutique currently offers store pick up services. You may also select the Pick up at David Yurman boutique button on an eligible product page to find a participating store location near you to pick up the item.
 
 
+
 #Store Data
 ${store_expected_address}                    798 Americana Way
-${store_expected_city_state}                 Glendale , CA 91210
+${store_expected_city_state}                 Glendale, CA 91210
 ${store_expected_phone_number}               (818) 241-2836
 
 #Authorized Data
@@ -190,7 +220,7 @@ ${expected_tiktok_link}                         https://www.tiktok.com/@davidyur
 ...    6003920010293951=1407    6003920058904130=2420
 
 ${gift_card_number_100}         6003920015168469
-${gift_card_pin_100}            8359
+${gift_card_pin_100}            8359      
 
 #PDP
 ${pdp_notify_me_msg_exp}                    YOU'RE ON THE LIST
@@ -205,72 +235,68 @@ ${pdp_ymal_title_us_exp}                    You May Also Like
 ${pdp_emftc_title_us_exp}                   Explore More from this Collection
 ${pdp_trend_now_us_exp}                     Trending Now
 ${pdp_badge_exp}                            New Arrival
-${LT_USERNAME}                              shariq.mohammed
-${LT_ACCESS_KEY}                            PDKXggfbp3fFLe18WAr0H4eQ3Hm8qBl4hDniEHNEnawMNy2NWa
 
 
-${reg_29_name}                          Auto Test
-${reg_29_password}                      Test*1234
-${reg_29_address}                       123 Main St
-${reg_29_address_1}                     999 Main St
-${reg_29_city}                          Los Angeles
-${reg_29_city_1}                        New York
-${reg_29_state}                         California
-${reg_29_state_1}                       New York
-${reg_29_zip}                           91335
-${reg_29_zip_1}                         91338
-${reg_29_tel}                           214-323-6591
-${reg_29_tel_1}                         214-323-4578
+#LOGIN
+${short_password}                           aaa
+${invalid_password}                         Numbpwd!
+${uppercase_invalid_password}               ABCDEF
+${lowercase_invalid_password}               abcdef
+${with_space_invalid_password}              a bcde
 
+#Cart
+${home_empty_minicart_exp}                  Your Shopping Bag is Empty.
 
-${reg_29_name}                          Auto Test
-${reg_29_password}                      Test*1234
-${reg_29_address}                       123 Main St
-${reg_29_address_1}                     999 Main St
-${reg_29_city}                          Los Angeles
-${reg_29_city_1}                        New York
-${reg_29_state}                         California
-${reg_29_state_1}                       New York
-${reg_29_zip}                           91335
-${reg_29_zip_1}                         91338
-${reg_29_tel}                           214-323-6591
-${reg_29_tel_1}                         214-323-4578
+#STATIC PAGES
+${about_us_title}                           About David Yurman
+@{expected_about_us_titles}                 An Artist’s Story  Our Values  Close to Our Hearts  The Journey  David Yurman Cable Book  Yurman Family Foundation  Paradise Found
+@{expected_return_exchanges_titles}         What is your return policy?     How can I make a return or exchange?    How do I return or exchange an item financed with Affirm?   If I return an item financed with Affirm, will I be charged?    Can gift cards purchased on DavidYurman.com be returned?    
+@{expected_customer_service_titles}         Where can I purchase David Yurman jewelry?      Where can I get more information about sizing for David Yurman jewelry?     Can David Yurman rings be resized?      Can David Yurman rings be resized?      Why is my order not going through?      How can I check or track an order I placed on DavidYurman.com?      How can I make a return or exchange?        How can I get an item repaired?     Do you offer appraisal or authentication services?      Do you offer appraisal or authentication services?      Where can I report a possible counterfeit design or website selling suspected David Yurman knock-offs?          Where can I report a possible counterfeit design or website selling suspected David Yurman knock-offs?      How do I unsubscribe from David Yurman emails, catalogs or phone calls?         How do I learn more about careers and benefits at David Yurman?
+${contact_customer_care_info_title}         Contact Customer Care
+@{contact_customer_care_info_text}          Phone   	1-888-398-7626		Email		Book an Appointment	    HOURS OF OPERATION      Monday-Friday: 8:30AM-7:30PM ET     Saturday & Sunday: 9:00AM-5:00PM ET
 
+${invalid_login_error_message}              Invalid login or password. Remember that password is case-sensitive. Please try again.
+##registration page text/messages
+${first_name_placeHolderValue}           First Name
+${last_name_placeHolderValue}            Last Name
+${email_placeHolderValue}                Email
+${retype_email_placeHolderValue}         Retype Email Address
+${password_placeHolderValue}             Password
+${retype_password_placeHolderValue}      Retype Password
+${registration_form_indicatorValue}      * Indicates required fields
+${password_requirement_1_value}          Is at least six characters in length
+${password_requirement_2_value}          Contains at least one capital letter and one lowercase letter
+${password_requirement_3_value}          Contains at least one number
+${password_requirement_4_value}          Does not contain spaces
+${password_requirement_5_value}          Does not contain your email address
+${password_requirement_6_value}          Contains at least one special character (f.ex. !#$£€%)
+${add_to_emailValue}                     Sign up to receive email updates from David Yurman about the latest collections and news. Unsubscribe at any time. See our Privacy Policy for details.
+${first_name_validationValue}            Please enter your First Name.
+${last_name_validationValue}             Please enter your Last Name.
+${email_validationValue}                 Please enter a valid email address
+${retype_email_validationValue}          Please enter a valid email address
+${password_validationValue}              Please enter a Password
+${retype_password_validationValue}       Please enter a Password
+${already_existing_user_validation}      User with that email address already exists.
+${email_mismatch_validation}             Please enter the same value again.
+${password_requirement_doesnt_match}     Sorry, the provided password does not match the required constraints.
+${password_requirement_minimum_length}   This field needs 6 to 255 characters
 
-##Registration - 01
-${register_firstname_err}                       css:#form-fname-error
-${register_lastname_err}                        css:#form-lname-error
-${register_email_err}                           css:#form-email-error
-${register_confirm_email_err}                   css:#form-email-confirm-error
-${register_password_err}                        css:#form-password-error
-${register_confirm_password_err}                css:#form-password-confirm-error
-${change_pass_link}                             css:.change-pass > a
-${current_password_locator}                     css:#changePasswordContainer #currentPassword
-${new_password_locator}                         css:#newPassword
-${confirm_password_locator}                     css:#newPasswordConfirm
-${submit_button}                                css:.password-submit
-${header_icon_account}                          css:.header-icon-account > svg
-${logout_link}                                  css:.popover a[href*='Logout']
-${login_error_message}                          css:.alert-danger
-${change_email_link}                            css:.change-email > a
-${new_email_locator}                            css:#newEmail
-${password_locator}                             css:#changeEmailContainer #currentPassword
-${save_email_button}                            css:#btnUpdateEmailSubmit
-${change_email_success_message}                 css:.change-email-success-message
-${password_check_personal_info_chars}           css:.six-characters
-${password_check_personal_info_uppercase}       css:.capital-lowercase
-${password_check_personal_info_lowercase}       css:.capital-lowercase
-${password_check_personal_info_number}          css:.one-number
-${password_check_personal_info_space}           css:.no-spaces
-${password_check_personal_info_email}           css:.no-email
-${password_check_personal_info_specialchar}     css:.special-character
-${first_name_personal_info_locator}             css:#dwfrm_profile #firstName
-${last_name_personal_info_locator}              css:#dwfrm_profile #lastName
-${birthday_personal_info_locator}               css:#dwfrm_profile #birthday
-${anniversary_personal_info_locator}            css:#dwfrm_profile #anniversary
-${save_personal_info_button}                    css:#dwfrm_profile .btn-save
-${invalid_feedback}                             css:.invalid-feedback
-${page_title_personal_info}                     css:.page-title
+##Order Confirmation
+${shipping_delivery_date_message}                  Order before 3 PM Eastern Time for delivery
 
+###Shipping
+${shipping_email_empty_err}                         Please enter a valid email address
+${shipping_fn_empty_err}                            Please enter your first name.
+${shipping_ln_empty_err}                            Please enter your last name.
+${shipping_phone_empty_err}                         Please enter your telephone number.
+${shipping_phone_invalid_err}                       Please enter a valid 10-digit telephone number.
+${shipping_addr1_empty_err}                         Please enter your address.
+${shipping_city_empty_err}                          Please enter your city.
+${shipping_city_invalid_err}                        Please use at least 2 characters (you are currently using 1 character).
+${shipping_state_empty_err}                         Please select a state.
+${shipping_zip_empty_err}                           Please enter your ZIP code.
+${shipping_zip_invalid_err}                         Please enter a valid 5 or 9-digit ZIP code.
 
-
+${REG_affirm_account}                   ana.nanu20@ro.osf-global.com
+${REG_affirm_pwd}                       Test*1234Test*1234

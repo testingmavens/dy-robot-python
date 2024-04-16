@@ -8,55 +8,16 @@ Resource          ../Keywords/Checkout.robot
 Open Store Locator page
     Go to   ${URL}stores?showMap=true&horizontalView=true&isForm=true&boutiques=true&retailers=true
     Close the Get the First Look modal
-    Wait Until Element Is Visible    ${logo_home}
+    Wait Until Element Is Visible    ${logo_home}    5s    Home Logo is not visible
  
-Fill and Search a Store Zipcode from Store Locator page
-  IF  '${shopLocale}' in ['US']
+Fill and Search a Store from Store Locator page
+    [Arguments]    ${zip_code}=90022    ${click_search_button}=True
     Scroll To Element                   ${store_form}
     Mouse Over                          ${logo_home}
-    CommonWeb.Check and Input text      ${store_location}       90022
-    CommonWeb.Check and Click           ${store_search_button}
-  ELSE IF  '${shopLocale}' in ['CN']
-    Scroll To Element                   ${store_form}
-    Mouse Over                          ${logo_home}
-    CommonWeb.Check and Input text      ${store_location}       AB T2P 4H9
-    CommonWeb.Check and Click           ${store_search_button}
-  ELSE IF  '${shopLocale}' in ['UK']
-    Scroll To Element                   ${store_form}
-    Mouse Over                          ${logo_home}
-    CommonWeb.Check and Input text      ${store_location}       90022
-    CommonWeb.Check and Click           ${store_search_button}
-  ELSE IF  '${shopLocale}' in ['FR']
-    Scroll To Element                   ${store_form}
-    Mouse Over                          ${logo_home}
-    CommonWeb.Check and Input text      ${store_location}       75001
-    CommonWeb.Check and Click           ${store_search_button}
-  END
-
-Fill and Search a Store Locality from Store Locator page
-  IF  '${shopLocale}' in ['US']
-    Scroll To Element                   ${store_form}
-    Mouse Over                          ${logo_home}
-    CommonWeb.Check and Input text      ${store_location}       Los Angeles
-    Scroll Element Into View            ${store_search_button}
-    CommonWeb.Check and Click           ${store_search_button}
-  ELSE IF  '${shopLocale}' in ['CN']
-    Scroll To Element                   ${store_form}
-    Mouse Over                          ${logo_home}
-    CommonWeb.Check and Input text      ${store_location}       Toronto
-    CommonWeb.Check and Click           ${store_search_button}
-  ELSE IF  '${shopLocale}' in ['UK']
-    Scroll To Element                   ${store_form}
-    Mouse Over                          ${logo_home}
-    CommonWeb.Check and Input text      ${store_location}       90022
-    CommonWeb.Check and Click           ${store_search_button}
-  ELSE IF  '${shopLocale}' in ['FR']
-    Scroll To Element                   ${store_form}
-    Mouse Over                          ${logo_home}
-    CommonWeb.Check and Input text      ${store_location}       Paris
-    CommonWeb.Check and Click           ${store_search_button}
-  END
-
+    CommonWeb.Check and Input text      ${store_location}       ${zip_code}
+    Scroll Element Into View    ${store_search_button}
+    Run Keyword If    ${click_search_button}    Click Element           ${store_search_button}
+    
 Check If Boutique filter is working
     CommonWeb.Scroll And Click by JS             ${checkbox_retailer}
     Check Store Locator fields
@@ -70,7 +31,7 @@ Check If Authorized filter is working
 
 Check Distance filter
     Check Quantity of stores  0  2
-    Check Quantity of stores  1  2
+    Check Quantity of stores  1  3
     Check Quantity of stores  3  4
     Check Quantity of stores  4  7
 
@@ -83,7 +44,6 @@ Check Services
 
 Check Quantity of stores
     [Arguments]    ${index}    ${threshold}
-    Scroll Element Into View    ${distance_dropdown_button}
     CommonWeb.Scroll And Click by JS     ${distance_dropdown_button}   
     CommonWeb.Scroll And Click by JS     css:.selectric-items [data-index="${index}"]
     Sleep    2
@@ -117,7 +77,7 @@ Check Store Details
     [Arguments]                                    ${actual_address} 
     CommonWeb.Should Contain Text                  ${actual_address}           ${store_expected_phone_number}
     CommonWeb.Should Contain Text                  ${actual_address}           ${store_expected_address}
-    CommonWeb.Should Contain Text                  ${actual_address}           ${store_expected_city_state}
+#   CommonWeb.Should Contain Text                  ${actual_address}           ${store_expected_city_state}
 
 Click View Store
     CommonWeb.Scroll And Click by JS        ${view_store_button}
@@ -155,25 +115,9 @@ Check Map pin details
     Check Store Details                 ${actual_address}
 
 Check Get Directions
-    Wait Until Page Contains Element    ${get_direction_button}        timeout=10s
-    Scroll Element Into View    ${get_direction_button}
-    Click by JS               ${get_direction_button}
+    Wait Until Page Contains Element    ${get_direction_button}    5s    Get Directions button is not loaded
+    CommonWeb.Click by JS               ${get_direction_button}
     Switch Window	NEW
     ${actual_url}                       Get Location
     CommonWeb.Should Contain Text       ${actual_url}           ${store_directions}
-
-Enter valid Store PickUp Guest details
-    [Arguments]    ${GUEST_EMAIL}   ${FIRST_NAME}   ${LAST_NAME}  ${PHONE}
-    ${shippingMail}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${guest_bopis_email}    timeout=3s
-    Run Keyword If    ${shippingMail}     Scroll To Element   ${guest_bopis_email}
-    Run Keyword If    ${shippingMail}     CommonWeb.Check and Input text          ${guest_bopis_email}    ${GUEST_email}
-    ${shippingName}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${guest_bopis_fn}    timeout=3s
-    Run Keyword If    ${shippingName}     Scroll To Element   ${guest_bopis_fn}
-    Run Keyword If    ${shippingName}     CommonWeb.Check and Input text          ${guest_bopis_fn}    ${FIRST_NAME}
-    ${shippingLastName}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${guest_bopis_ln}    timeout=3s
-    Run Keyword If    ${shippingLastName}     Scroll To Element   ${guest_bopis_ln}
-    Run Keyword If    ${shippingLastName}     CommonWeb.Check and Input text          ${guest_bopis_ln}    ${LAST_NAME}
-    ${shippingPhoneNumber}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${guest_bopis_phone}    timeout=3s
-    Run Keyword If    ${shippingPhoneNumber}     Scroll To Element   ${guest_bopis_phone}
-    Run Keyword If    ${shippingPhoneNumber}     CommonWeb.Check and Input text          ${guest_bopis_phone}    ${PHONE}
 

@@ -11,13 +11,13 @@ Resource    PDP.robot
 Search for a product from header search
    [Arguments]  ${search_query}
    Click Element  xpath://div[@class='d-none d-lg-inline-block']
-   Wait Until Element Is Visible    xpath://span[text()='Popular Products']  20s  error=Popular products not displayed
+   #Wait Until Element Is Visible    xpath://span[text()='Popular Products']  100s  error=Popular products not displayed
    Check and Input text    xpath://input[@id='header-search-field']    ${search_query}
    Sleep  3s
-   
+
 Check did you mean suggestion for
     [Arguments]  ${search_query}
-    Wait Until Element Is Visible    xpath://span[@class='suggestions-phrases bold underline']   10s  error=did you mean suggestion not shown
+    Wait Until Element Is Visible    xpath://span[@class='suggestions-phrases bold underline']   20s  error=did you mean suggestion not shown
     ${did_you_mean_phrase} =  Check and Get text    xpath://span[@class='suggestions-phrases bold underline']
     Should Contain  ${did_you_mean_phrase.lower()}    ${search_query.lower()}
 
@@ -62,6 +62,7 @@ Check top results displayed for search
 
 
 Click View all products
+  Wait Until Page Contains Element    xpath://span[text()='View all products']
   Click Element    xpath://span[text()='View all products']
   Sleep  10s
   Close the Get the First Look modal
@@ -83,21 +84,21 @@ Click on did you mean option
 Click on search instead option
       [Arguments]  ${search_instead_option}
       Click Element    xpath:(//span[@class='suggestions-phrases suggestions-phrases-item']//a/span)[${search_instead_option}]
-      
-Check no results message 
+
+Check no results message
    [Arguments]  ${search_query}
    Wait Until Element Is Visible    xpath:(//div[@class='no-search-results'])[1]   5s  error=No results message not displayed
    ${actual_message} =  Get Text    xpath:(//div[@class='no-search-results'])[1]
    Should Be Equal As Strings    ${actual_message}    Sorry, we couldn’t find any results for "${search_query}".
    ${actual_secondary_message} =  Get Text    xpath:(//div[@class='no-search-results'])[2]
    Should Be Equal As Strings    ${actual_secondary_message}    Try a new search using a different spelling or keywords.
-   
-Click search icon from header search 
+
+Click search icon from header search
   Click Element    xpath:(//button[@name='search-button'])[1]
-  
+
 Click search box
   Click Element  xpath://div[@class='d-none d-lg-inline-block']
-  
+
 Verify no results found page
     Element Should Contain     xpath://div[@class='no-results-header']    No results found
     Element Should Be Visible    xpath://input[@placeholder='Try a new search']
@@ -108,10 +109,11 @@ Search item from no results page
     Click Element    xpath://input[@placeholder='Try a new search']
     CommonWeb.Check and Input text    xpath://input[@placeholder='Try a new search']    ${search_query}
     Click Element    xpath:(//button[@name='search-button'])[2]
-    
+
 Sort item by
    [Arguments]  ${sort}
     Mouse Over   xpath://div[@class='nice-select custom-select text-entered']
+    Scroll Element Into View    xpath://ul/li[contains(text(),'${sort}')]
     Click Element    xpath://ul/li[contains(text(),'${sort}')]
 
 Check Products are sorted by Price low to high
@@ -171,7 +173,7 @@ Check customer care link
 Check did you mean suggestion
     ${did_you_mean_phrase} =  Check and Get text    xpath://span[@class='suggestions-phrases bold underline']
     Should Contain Text  ${did_you_mean_phrase}    ${search}
-    
+
 Filter item by price range
     [Arguments]  ${price_range}= 0-749.99
     ${price_filters}=    Create Dictionary    0-749.99=1    750-1499.99=2    1500-2999.99=3   3000-4999.99=4   Above 5000=5
@@ -205,17 +207,6 @@ Check if products are filtered with price range
   END
 
 
-Remove currency and comma from price
-    [Arguments]  ${price}
-    ${cn_dollar_rm}    Replace String    ${price}           C$   ${SPACE}
-    ${dollar_rm}       Replace String    ${cn_dollar_rm}    $    ${SPACE}
-    ${euro_rm}         Replace String    ${dollar_rm}       €    ${SPACE}
-    ${pound_rm}        Replace String    ${euro_rm}         £    ${SPACE}
-    ${comma_rm}        Replace String    ${pound_rm}        ,    ${SPACE}
-    ${clean_price}     Remove String     ${comma_rm}        ${SPACE}
-  RETURN  ${clean_price}
-
-
 Check Products all products contains best seller tags
     ${elements}   Get Web Elements  xpath://div[@class='tile-body']//p[contains(@class,'product-badge-text')]
     ${num_elements}    Get Length    ${elements}
@@ -232,3 +223,22 @@ Check all products in PLP has striked through rates
         Should Contain Text    strike    ${attribute}
     END
    END
+
+Check Lazy Loading
+     ${elements} =    Get WebElements    xpath://div[@class='pdp-link']
+     ${elements_length} =   Get Length    ${elements}
+     Should Be Equal As Integers    ${elements_length}    32
+     Scroll To Element    xpath:(//div[@class='pdp-link'])[32]
+     Sleep  10s
+     Wait Until Element Is Visible    xpath:(//div[@class='pdp-link'])[64]  timeout=50s
+     ${elements_1} =    Get WebElements    xpath://div[@class='pdp-link']
+     ${elements_length_1} =   Get Length    ${elements_1}
+     Should Be Equal As Integers    ${elements_length_1}    64
+
+Check category link
+    [Arguments]  ${category}
+    Click Element     xpath://a[@href="/${category}.html"]
+    Sleep  1s
+    Click Element     xpath://a[@href="/${category}.html"]
+    ${current_location}=    Get Location
+    Should End With    ${current_location}    ${category}.html

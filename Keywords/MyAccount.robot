@@ -2,7 +2,7 @@
 Library           SeleniumLibrary    screenshot_root_directory=EMBED
 Resource          ../Resources/Locators.robot
 Resource          ../Keywords/CommonWeb.robot
-Resource          ../Keywords/NewCustomerRegistration.robot
+Resource          ../Keywords/Login.robot
 
 
 *** Keywords ***
@@ -25,26 +25,14 @@ Check new credit card was saved after the purchase
     Run Keyword And Warn On Failure    Element Should Be Visible    ${myA_new_card_row_info_l}
     Run Keyword And Warn On Failure    Element Should Be Visible    ${myA_new_card_next_row_l}
 
-Fill in the Register form
-    Clear all fields on registration form
-     Check and Input text    ${first_name_textField_reg}    ${FIRST_NAME}
-     Check and Input text    ${last_name_textField_reg}    ${LAST_NAME}
-     Generate Timestamp Email
-     Check and Input text    ${email_textField_reg}        ${guest_valid}
-     Check and Input text    ${retype_email_textField_reg}  ${guest_valid}
-     Check and Input text    ${password_textField_reg}  P@ssword00
-     Check and Input text    ${retype_password_textField_reg}  P@ssword00
-     Sleep  2s
-     NewCustomerRegistration.User clicks register button
-     Element Should Be Visible  ${my_account_title}
-
 Check that the user is successfully logged in and redirected to Account Details page
     [Arguments]    ${email}
     Run Keyword And Warn On Failure    Wait Until Page Contains Element    ${my_account_page_l}    10s
     Run Keyword And Warn On Failure    Element Should Contain    ${my_acc_email_elm_l}    ${email}
 
 Click on Add a New Address button
-    CommonWeb.Check And Click    ${myA_add_address_cta_l}
+    Scroll Element Into View    ${myA_add_address_cta_l}
+    Click Element    ${myA_add_address_cta_l}
     Wait Until Page Contains Element    ${myA_add_show_address_cta_l}    10s
     Wait Until Element Is Visible    ${myA_add_addr_fn_l}    10s
 
@@ -53,19 +41,19 @@ Click on Save button from Add a New Address form
 
 Verify the empty field validation messages for Add a New Address form
     Run Keyword And Warn On Failure    Wait Until Page Contains Element    ${myA_add_addr_fn_err_l}    10s
-    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_fn_err_l}    ${myA_add_addr_fn_err}
+    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_fn_err_l}    Please enter your first name.
     Run Keyword And Warn On Failure    Wait Until Page Contains Element    ${myA_add_addr_ln_err_l}    10s
-    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_ln_err_l}    ${myA_add_addr_ln_err}
+    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_ln_err_l}    Please enter your last name.
     Run Keyword And Warn On Failure    Wait Until Page Contains Element    ${myA_add_addr_addr_err_l}    10s
-    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_addr_err_l}    ${myA_add_addr_addr_err}
+    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_addr_err_l}    Please enter your address.
     Run Keyword And Warn On Failure    Wait Until Page Contains Element    ${myA_add_addr_city_err_l}    10s
-    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_city_err_l}    ${myA_add_addr_city_err}
+    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_city_err_l}    Please enter your city.
     Run Keyword And Warn On Failure    Wait Until Page Contains Element    ${myA_add_addr_state_err_l}    10s
-    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_state_err_l}    ${myA_add_addr_state_err}
+    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_state_err_l}    Please select a state.
     Run Keyword And Warn On Failure    Wait Until Page Contains Element    ${myA_add_addr_zip_err_l}    10s
-    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_zip_err_l}    ${myA_add_addr_zip_err}
+    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_zip_err_l}    Please enter your ZIP code.
     Run Keyword And Warn On Failure    Wait Until Page Contains Element    ${myA_add_addr_tel_err_l}    10s
-    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_tel_err_l}    ${myA_add_addr_tel_err}
+    Run Keyword And Warn On Failure    Element Text Should Be    ${myA_add_addr_tel_err_l}    Please enter your telephone number.
 
 Fill in the Add a New Address form
     [Arguments]    ${fn}   ${ln}    ${adr}    ${city}    ${state}    ${zip}    ${tel}
@@ -145,10 +133,11 @@ Click on Delete link near first address
     Wait Until Element Is Visible    ${myA_first_addr_remove_conf_l}    10s
 
 Click Confirm on the Delete Address modal
-    Wait Until Element Is Visible    ${myA_first_addr_remove_conf_l}    10s
-    Sleep  2s
+    Wait Until Element Is Visible    ${myA_first_addr_remove_conf_l}    20s
+    Scroll Element Into View    ${myA_first_addr_remove_conf_l}
+    Sleep  1s
     Click by JS    ${myA_first_addr_remove_conf_l}
-    Wait Until Element Is Not Visible    ${myA_first_addr_remove_conf_l}    20s
+    Wait Until Element Is Not Visible    ${myA_first_addr_remove_conf_l}    10s
 
 Check that My Address section is empty
     Wait Until Page Does Not Contain Element    ${myA_new_addr_first_row_l}    10s
@@ -159,12 +148,11 @@ Click on Add a New Credit Card button
     Wait Until Page Contains Element    ${myA_add_card_name_l}    10s
 
 Click on Save button from Add a New Credit Card form
-      Scroll Element Into View    ${myA_add_payment_save_l}
-      Click Element  ${myA_add_payment_save_l}
+    CommonWeb.Scroll And Click by JS    ${myA_add_payment_save_l}
 
 Close the New Credit Card form
     Click Element    ${myA_add_payment_cancel_l}
-    Wait Until Element Is Not Visible    ${myA_add_payment_cancel_l}    20s
+    Wait Until Element Is Not Visible    ${myA_add_payment_cancel_l}    10s
 
 Verify the empty field validation messages for Add a New Credit Card form
     Run Keyword And Warn On Failure    Wait Until Page Contains Element    ${myA_card_owner_err_l}    10s
@@ -253,58 +241,29 @@ Check that Credit Card section is empty
     Run Keyword And Warn On Failure    Element Should Not Be Visible    ${myA_new_card_first_row_l}
 
 Access My Account page directly
-    Go To    ${PROD_URL}account
+    IF    '${env}' in ['dev']
+        Go To    ${DEV_URL}account
+    ELSE IF    '${env}' in ['uat']
+        Go To    ${UAT_URL}account
+    ELSE IF    '${env}' in ['prod']
+        Go To    ${PROD_URL}account
+    END
     Run Keyword And Warn On Failure    Wait Until Page Contains Element    ${my_account_page_l}    10s
 
 Click on Order History tab
     Click Element    ${myA_orders_tab_l}
     Wait Until Page Contains Element    ${myA_orders_page_l}    10s
 
-Change Password
-    [Arguments]     ${actual_password}    ${new_password}
-    Click Element   ${change_pass_link}
-    Wait Until Element Is Visible    ${current_password_locator}    30    Change Password Container is not displayed
-    Input Text      ${current_password_locator}    ${actual_password}
-    Input Text      ${new_password_locator}        ${new_password}
-    Input Text      ${confirm_password_locator}    ${new_password}
-    Click Element   ${submit_button}
-    Wait Until Element Is Not Visible    ${current_password_locator}    30    Change Password Container is not displayed
+Fill in the Register form
+     Clear all fields on registration form
+     Check and Input text    ${first_name_textField_reg}    ${FIRST_NAME}
+     Check and Input text    ${last_name_textField_reg}    ${LAST_NAME}
+     Generate Timestamp Email
+     Check and Input text    ${email_textField_reg}        ${guest_valid}
+     Check and Input text    ${retype_email_textField_reg}  ${guest_valid}
+     Check and Input text    ${password_textField_reg}  P@ssword00
+     Check and Input text    ${retype_password_textField_reg}  P@ssword00
+     Sleep  2s
+     User clicks register button
+     Element Should Be Visible  ${my_account_title}
 
-Change Email
-    [Arguments]     ${new_email}    ${password}
-    Click Element   ${change_email_link}
-    Wait Until Element Is Visible    ${new_email_locator}    30    Change Email Container is not displayed
-    Input Text      ${new_email_locator}    ${new_email}
-    Input Text      ${password_locator}    ${password}
-    Click Element   ${save_email_button}
-    Wait Until Element Is Not Visible    ${new_email_locator}    30    Change Email Container is not displayed
-
-
-Change Name in Personal Information
-    [Arguments]    ${first_name}=     ${last_name}=
-    Input Text    ${first_name_personal_info_locator}    ${first_name}
-    Input Text    ${last_name_personal_info_locator}    ${last_name}
-
-Change Birthday in Personal Information
-    [Arguments]    ${birthday}
-    Input Text    ${birthday_personal_info_locator}    ${birthday}
-
-Change Anniversary in Personal Information
-    [Arguments]    ${anniversary}
-    Input Text    ${anniversary_personal_info_locator}    ${anniversary}
-
-Save Personal Information
-    [Arguments]     ${first_name}
-    Click Element    ${save_personal_info_button}
-    Wait Until Element Contains    ${page_title_personal_info}    ${first_name}    timeout=30s
-
-Check Personal Information
-    [Arguments]    ${first_name}    ${last_name}    ${birthday}    ${anniversary}
-    ${actual_first_name}=                   Get text from form              ${first_name_personal_info_locator}
-    ${actual_last_name}=                    Get text from form              ${last_name_personal_info_locator}
-    ${actual_birthday}=                     Get text from form              ${birthday_personal_info_locator}
-    ${actual_anniversary}=                  Get text from form              ${anniversary_personal_info_locator}
-    Run Keyword And Warn On Failure         Should Be Equal As Strings      ${actual_first_name}      ${first_name}
-    Run Keyword And Warn On Failure         Should Be Equal As Strings      ${actual_last_name}       ${last_name}
-    Run Keyword And Warn On Failure         Should Be Equal As Strings      ${actual_birthday}        ${birthday}
-    Run Keyword And Warn On Failure         Should Be Equal As Strings      ${actual_anniversary}     ${anniversary}

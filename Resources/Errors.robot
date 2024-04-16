@@ -70,43 +70,4 @@ ${myA_card_addr_err}                                Please enter your address.
 ${myA_card_city_err}                                Please enter your city.
 ${myA_card_zip_err}                                 Please enter your ZIP code.
 ${myA_card_tel_err}                                 Please enter your telephone number.
-${myA_card_state_err}                               Please select a state.{shipping_addr1_empty_err}                         Please enter your address.
-${shipping_city_empty_err}                          Please enter your city.
-${shipping_city_invalid_err}                        Please use at least 2 characters (you are currently using 1 character).
-${shipping_state_empty_err}                         Please select a state.
-${shipping_zip_empty_err}                           Please enter your ZIP code.
-${shipping_zip_invalid_err}                         Please enter a valid 5 or 9-digit ZIP code.
-
-###Payment
-${payment_number_empty_err}                         Please enter a 16-digit gift card number.
-${payment_pin_empty_err}                            Please enter a 4-digit PIN card number.
-${payment_cc_nr_empty_err}                          Please enter your card number.
-${payment_cc_name_empty_err}                        Please enter the name as it appears on the credit card.
-${payment_cc_exp_m_empty_err}                       Please enter your credit card’s expiration month.
-${payment_cc_exp_y_empty_err}                       Please enter your credit card’s expiration year.
-${payment_cc_cvv_empty_err}                         Please enter your card’s 3- or 4-digit security code.
-${pay_bill_fn_empty_err}                            Please enter your first name.
-${pay_bill_ln_empty_err}                            Please enter your last name.
-${pay_bill_addr_empty_err}                          Please enter your address.
-${pay_bill_city_empty_err}                          Please enter your city.
-${pay_bill_state_empty_err}                         Please select a state.
-${pay_bill_zip_empty_err}                           Please enter your ZIP code.
-${bill_city_invalid_err}                            Please lengthen this text to 2 characters or more (you are currently using 1 character).
-${bill_zip_invalid_err}                             Please enter a valid 5 or 9-digit ZIP code.
-${billing_error_message_text_err}                   The payment you submitted is not valid. Please re-enter payment information.
-${pay_promo_empty_err}                              Please enter a valid promo code.
-${pay_gift_card_err}                                Please verify your gift card number and PIN.
-
-#LOGIN
-${register_empty_first_name_err}                    Please enter your first name.
-${register_empty_last_name_err}                     Please enter your last name.
-${register_invalid_email_err}                       Please enter a valid email address
-${register_mismatch_emails_err}                     Please enter the same value again.
-${register_empty_pwd_err}                           Please enter a password
-${register_missing_char_pwd_err}                    This field needs 6 to 255 characters
-${register_not_match_pwd_err}                       Passwords do not match
-${register_invalid_pwd_err}                         Sorry, the provided password does not match the required constraints.
-${invalid_login_error_message}                      Invalid login or password. Remember that password is case-sensitive. Please try again.
-
-##Order Confirmation
-${shipping_delivery_date_message}                  Order before 3 PM Eastern Time for delivery
+${myA_card_state_err}                               Please select a state.

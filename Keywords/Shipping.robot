@@ -1,7 +1,6 @@
 *** Settings ***
 Library           SeleniumLibrary    screenshot_root_directory=EMBED
 Resource          ../Resources/Locators.robot
-Resource          ../Resources/Errors.robot
 Resource          ../Keywords/CommonWeb.robot
 Resource          ../Keywords/Checkout.robot
 
@@ -48,29 +47,44 @@ Enter valid Shipping details
     ${shippingMail}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${shipping_email}    timeout=3s
     Run Keyword If    ${shippingMail}     Scroll To Element   ${shipping_email}
     Run Keyword If    ${shippingMail}     CommonWeb.Check and Input text          ${shipping_email}    ${GUEST_email}
+    Run Keyword If    ${shippingMail}     Wait Until Page Contains Element    ${shipping_email_entered_l}    5s    error=Email was not entered
     ${shippingName}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${shipping_fn}    timeout=3s
     Run Keyword If    ${shippingName}     Scroll To Element   ${shipping_fn}
     Run Keyword If    ${shippingName}     CommonWeb.Check and Input text          ${shipping_fn}    ${FIRST_NAME}
+    Wait Until Page Contains Element    ${shipping_fn_entered_l}    5s    error=First Name was not entered
     ${shippingLastName}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${shipping_ln}    timeout=3s
     Run Keyword If    ${shippingLastName}     Scroll To Element   ${shipping_ln}
     Run Keyword If    ${shippingLastName}     CommonWeb.Check and Input text          ${shipping_ln}    ${LAST_NAME}
+    Wait Until Page Contains Element    ${shipping_ln_entered_l}    5s    error=Last Name was not entered
     ${shippingPhoneNumber}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${shipping_phone}    timeout=3s
     Run Keyword If    ${shippingPhoneNumber}     Scroll To Element   ${shipping_phone}
     Run Keyword If    ${shippingPhoneNumber}     CommonWeb.Check and Input text          ${shipping_phone}    ${PHONE}
+    Wait Until Page Contains Element    ${shipping_phone_entered_l}    5s    error=Phone was not entered
     ${shippingAddress1}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${shipping_address_one}    timeout=3s
     Run Keyword If    ${shippingAddress1}   Scroll To Element   ${shipping_address_one}
     Run Keyword If    ${shippingAddress1}   CommonWeb.Check and Input text          ${shipping_address_one}    ${ADDRESS}
+    Wait Until Page Contains Element    ${shipping_address_one_entered_l}    5s    error=Address was not entered
     ${shippingCityName}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${shipping_city}    timeout=3s
     Run Keyword If    ${shippingCityName}     Scroll To Element   ${shipping_city}
     Run Keyword If    ${shippingCityName}     CommonWeb.Check and Input text          ${shipping_city}    ${CITY}
+    Wait Until Page Contains Element    ${shipping_city_entered_l}    5s    error=City was not entered
     CommonWeb.Scroll To Element    ${shipping_address_one}
     ${shippingStateName}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${shipping_state}    timeout=5s
     Run Keyword If    ${shippingStateName}    Click Element    ${shipping_state_lbl}
+    IF  '${shopLocale}' in ['US']
     Run Keyword If    ${shippingStateName}    Click Element    xpath://fieldset[@class="shipping-address-block "]//li[contains(.,'New York')]
+    Wait Until Page Contains Element    ${shipping_state_selected_l}    5s
+    Element Text Should Be    ${shipping_state_selected_l}    New York
+    ELSE IF  '${shopLocale}' in ['CN']
+    Run Keyword If    ${shippingStateName}    Click Element    xpath://fieldset[@class="shipping-address-block "]//li[contains(.,'Manitoba')]
+    Wait Until Page Contains Element    ${shipping_state_selected_l}    5s
+    Element Text Should Be    ${shipping_state_selected_l}    Manitoba
+    END
     ${shippingZipCode}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${shipping_zip}    timeout=3s
     Run Keyword If    ${shippingZipCode}     Scroll To Element   ${shipping_zip}
-    Sleep  2s
-    Run Keyword If    ${shippingZipCode}     CommonWeb.Check and Input text  ${shipping_zip}   ${ZIP}
+    Sleep    2s
+    Run Keyword If    ${shippingZipCode}     CommonWeb.Check and Input text          ${shipping_zip}   ${ZIP}
+    Wait Until Page Contains Element    ${shipping_zip_entered_l}    5s    error=Zip was not entered
 
 Enter invalid Shipping details
     [Arguments]    ${invalid_EMAIL}   ${invalid_PHONE}    ${invalid_CITY}    ${invalid_ZIP}
@@ -141,14 +155,20 @@ Check that the default Delivery Method is selected
 Select Delivery
     [Arguments]    ${del}
     IF    "${del}" == "2-day"
+        Wait Until Page Contains Element    ${shipping_2_day_del_l}    5s
         CommonWeb.Scroll And Click by JS    ${shipping_2_day_del_l}
     ELSE IF    "${del}" == "Overnight"
+        Wait Until Page Contains Element    ${shipping_overnight_del_l}    5s
         CommonWeb.Scroll And Click by JS    ${shipping_overnight_del_l}
-        ${over_night_delivery_selected}=    Run Keyword And Return Status  Wait Until Page Contains Element    ${shipping_selected_shipping_l}    10s    Shipping is not yet selected
     ELSE IF    "${del}" == "Standard"
+        Wait Until Page Contains Element    ${shipping_standard_del_l}    5s
         CommonWeb.Scroll And Click by JS    ${shipping_standard_del_l}
+    ELSE IF    "${del}" == "USPS"
+        Wait Until Page Contains Element    ${shipping_usps_del_l}    5s
+        CommonWeb.Scroll And Click by JS    ${shipping_usps_del_l}
     END
     Wait Until Page Contains Element    ${shipping_selected_shipping_l}    10s    Shipping is not yet selected
+    Sleep  1s
     ${selected_shipping_cost}     Check and Get text    ${shipping_sale_shipping_l}
     Set Test Variable    ${retrieved_shipping_cost}    ${selected_shipping_cost}
 
@@ -157,7 +177,7 @@ Check if the Shipping cost was update in the Summary
     Run Keyword And Warn On Failure     Should Be Equal As Strings    ${summary_shipping}    ${retrieved_shipping_cost}
 
 Verify the invalid fields validation on Shipping Address step
-    Enter invalid Shipping details        ${invalid_email}    ${invalid_phone}    ${invalid_city}    ${invalid_zip}
+    Enter invalid Shipping details        io.com    000    $    ---
     Click on Continue To Payment button
     Run Keyword And Warn On Failure     Wait Until Element Is Visible      ${shipping_email_empty_err_l}      5s
     Run Keyword And Warn On Failure     Element Text Should Be    ${shipping_email_empty_err_l}    ${shipping_email_empty_err}
@@ -170,34 +190,84 @@ Verify the invalid fields validation on Shipping Address step
 
 Enter text in shipping address
     [Arguments]     ${add}
-    Scroll To Element   ${shipping_address_one}
+    Scroll Element Into View    ${shipping_phone}
+    Clear Element Text     ${shipping_address_one}
     CommonWeb.Check and Input text          ${shipping_address_one}     ${add}
 
 Verify the address suggestions are NOT displayed
+    Scroll Element Into View    ${shipping_phone}
     Wait Until Page Contains Element    ${dqe_disabled}      20s     error= Address Suggestions are displayed
 
 Verify the address suggestions are displayed
+    Scroll Element Into View    ${shipping_phone}
     Wait Until Page Contains Element    ${dqe_enabled}    20s     error= Address Suggestions are not loaded
-    Scroll Page    0    30
     Wait Until Element Is Visible    ${dqe_enabled}     20s     error= Address Suggestions are not visible
     Wait Until Element Is Visible    ${dqe_enabled_lbl}     20s     error= Address Suggestions are not visible
 
 Select suggestion number
     [Arguments]     ${nr}
     Wait Until Element Is Visible    ${dqe_enabled_list}     20s     error= Address Suggestions are not visible
+    Scroll Element Into View    css:.pac-container .pac-item:nth-child(${nr}) .pac-item-query+span
     Click Element   css:.pac-container .pac-item:nth-child(${nr}) .pac-item-query+span
 
 Fill in the remaining Shipping details
     [Arguments]     ${mail}    ${fn}    ${ln}    ${phone}
     Execute Javascript    window.scrollTo(0,document.body.scrollHeight/2)
+    Sleep  2s
     Scroll To Element   ${shipping_email}
     CommonWeb.Check and Input text          ${shipping_email}    ${mail}
+    Sleep  2s
     Scroll To Element   ${shipping_fn}
     CommonWeb.Check and Input text          ${shipping_fn}    ${fn}
+    Sleep  2s
     Scroll To Element   ${shipping_ln}
     CommonWeb.Check and Input text          ${shipping_ln}    ${ln}
+    Sleep  2s
     Scroll To Element   ${shipping_phone}
     CommonWeb.Check and Input text          ${shipping_phone}    ${phone}
+
+Change the state and zip
+    [Arguments]    ${STATE}    ${ZIP}
+    CommonWeb.Scroll To Element    ${shipping_address_one}
+    ${shippingStateName}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${shipping_state}    timeout=5s
+    Run Keyword If    ${shippingStateName}    Click Element    ${shipping_state_lbl}
+    Run Keyword If    ${shippingStateName}    Click Element    xpath://fieldset[@class="shipping-address-block "]//li[contains(.,'${STATE}')]
+    ${shippingZipCode}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${shipping_zip}    timeout=3s
+    Run Keyword If    ${shippingZipCode}     Scroll To Element   ${shipping_zip}
+    Run Keyword If    ${shippingZipCode}     CommonWeb.Check and Input text          ${shipping_zip}   ${ZIP}
+
+
+Enter valid Shipping details for EU
+    [Arguments]    ${GUEST_EMAIL}   ${FIRST_NAME}   ${LAST_NAME}   ${ADDRESS}   ${ADDRESS2}   ${ZIP}   ${PHONE}   ${CITY}
+    Select Frame    xpath://iframe[@id='Intrnl_CO_Container']
+    ${shippingName}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath://input[@id='CheckoutData_BillingFirstName']    timeout=3s
+    Run Keyword If    ${shippingName}     Scroll To Element   xpath://input[@id='CheckoutData_BillingFirstName']
+    Run Keyword If    ${shippingName}     CommonWeb.Check and Input text      xpath://input[@id='CheckoutData_BillingFirstName']    ${FIRST_NAME}
+    ${shippingLastName}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath://input[@id='CheckoutData_BillingLastName']    timeout=3s
+    Run Keyword If    ${shippingLastName}     Scroll To Element   xpath://input[@id='CheckoutData_BillingLastName']
+    Run Keyword If    ${shippingLastName}     CommonWeb.Check and Input text     xpath://input[@id='CheckoutData_BillingLastName']    ${LAST_NAME}
+    ${shippingMail}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath://input[@id='CheckoutData_Email']    timeout=3s
+    Run Keyword If    ${shippingMail}         Scroll Page    0    document.getElementById('CheckoutData_Email').offsetTop
+    Run Keyword If    ${shippingLastName}     CommonWeb.Check and Input text   xpath://input[@id='CheckoutData_Email']    guest@mailsac.com
+    ${shippingAddress1}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath://input[@id='CheckoutData_BillingAddress1']    timeout=3s
+    Run Keyword If    ${shippingAddress1}   Scroll To Element   xpath://input[@id='CheckoutData_BillingAddress1']
+    Run Keyword If    ${shippingAddress1}   CommonWeb.Check and Input text          xpath://input[@id='CheckoutData_BillingAddress1']    ${ADDRESS}
+    ${shippingAddress2}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath://input[@id='CheckoutData_BillingAddress1']    timeout=3s
+    Run Keyword If    ${shippingAddress2}   Scroll To Element   xpath://input[@id='CheckoutData_BillingAddress2']
+    Run Keyword If    ${shippingAddress2}   CommonWeb.Check and Input text          xpath://input[@id='CheckoutData_BillingAddress2']    ${ADDRESS2}
+    ${shippingCityName}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath://input[@id='BillingCity']    timeout=3s
+    Run Keyword If    ${shippingCityName}     Scroll To Element   xpath://input[@id='BillingCity']
+    Run Keyword If    ${shippingCityName}     CommonWeb.Check and Input text          xpath://input[@id='BillingCity']    ${CITY}
+    ${shippingZipCode}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath://input[@id='BillingZIP']    timeout=3s
+    Run Keyword If    ${shippingZipCode}     Scroll To Element   xpath://input[@id='BillingZIP']
+    Sleep    2s
+    Run Keyword If    ${shippingZipCode}     CommonWeb.Check and Input text          xpath://input[@id='BillingZIP']   ${ZIP}
+    ${shippingPhoneNumber}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath://input[@id='CheckoutData_BillingPhone']    timeout=3s
+    Run Keyword If    ${shippingPhoneNumber}     Scroll To Element   xpath://input[@id='CheckoutData_BillingPhone']
+    Run Keyword If    ${shippingPhoneNumber}     CommonWeb.Check and Input text          xpath://input[@id='CheckoutData_BillingPhone']    ${PHONE}
+    Unselect Frame
+
+
 
 Check delivery date for the shipping method
    [Arguments]  ${shipping_method}
@@ -219,31 +289,31 @@ Check delivery date for the shipping method
       Run Keyword And Warn On Failure    Element Text Should Be     ${shipping_method_message_l}   ${shipping_delivery_date_message} on ${converted_delivery_Date}.
    END
 
+Verify the empty fields validation on Shipping Address step for EU
+    Run Keyword And Warn On Failure     Wait Until Element Is Visible      ${shipping_email_empty_err_l}      5s
+    Run Keyword And Warn On Failure     Element Text Should Be    ${shipping_email_empty_err_l}    ${shipping_email_empty_err}
+    Run Keyword And Warn On Failure     Wait Until Element Is Visible      ${shipping_fn_empty_err_l}      5s
+    Run Keyword And Warn On Failure     Element Text Should Be    ${shipping_fn_empty_err_l}    ${shipping_fn_empty_err}
+    Run Keyword And Warn On Failure     Wait Until Element Is Visible      ${shipping_ln_empty_err_l}      5s
+    Run Keyword And Warn On Failure     Element Text Should Be    ${shipping_ln_empty_err_l}    ${shipping_ln_empty_err}
+    Run Keyword And Warn On Failure     Wait Until Element Is Visible      ${shipping_phone_empty_err_l}   5s
+    Run Keyword And Warn On Failure     Element Text Should Be    ${shipping_phone_empty_err_l}    ${shipping_phone_empty_err}
+    Run Keyword And Warn On Failure     Wait Until Element Is Visible      ${shipping_city_empty_err_l}   5s
+    Run Keyword And Warn On Failure     Element Text Should Be    ${shipping_city_empty_err_l}    ${shipping_city_empty_err}
+    Run Keyword And Warn On Failure     Wait Until Element Is Visible      ${shipping_state_empty_err_l}   5s
+    Run Keyword And Warn On Failure     Element Text Should Be    ${shipping_state_empty_err_l}    ${shipping_state_empty_err}
+    Run Keyword And Warn On Failure     Wait Until Element Is Visible      ${shipping_zip_empty_err_l}     5s
+    Run Keyword And Warn On Failure     Element Text Should Be    ${shipping_zip_empty_err_l}    ${shipping_zip_empty_err}
 
 
-Change the state and zip
-    [Arguments]    ${STATE}    ${ZIP}
-    CommonWeb.Scroll To Element    ${shipping_address_one}
-    ${shippingStateName}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${shipping_state}    timeout=5s
-    Run Keyword If    ${shippingStateName}    Click Element    ${shipping_state_lbl}
-    Scroll Element Into View    xpath://fieldset[@class="shipping-address-block "]//li[contains(.,'${STATE}')]
-    Run Keyword If    ${shippingStateName}    Click Element    xpath://fieldset[@class="shipping-address-block "]//li[contains(.,'${STATE}')]
-    ${shippingZipCode}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${shipping_zip}    timeout=3s
-    Run Keyword If    ${shippingZipCode}     Scroll To Element   ${shipping_zip}
-    Run Keyword If    ${shippingZipCode}     CommonWeb.Check and Input text  ${shipping_zip}   ${ZIP}
-
-Verify if Order Summary data is correct
-    [Arguments]    ${size}    ${qty}
-    ${os_variant}=    Get Text    ${checkout_summary_descript_l}
-    Run Keyword And Warn On Failure     Should Be Equal As Strings    ${product_name_subtitle}    ${os_variant}
-    ${os_size}=    Get Text    ${checkout_summary_size_l}
-    Run Keyword And Warn On Failure     Element Text Should Be    ${checkout_summary_size_l}    Size ${size}
-    ${os_qty}=    Get Text    ${checkout_summary_qty_l}
-    ${os_qty_just_nr}=    Set Variable    ${os_qty.replace('Qty', '')}
-    Run Keyword And Warn On Failure     Element Text Should Be    ${checkout_summary_qty_l}    Qty ${qty}
-    ${subtotal}=    Get Text    ${checkout_summary_subtotal_l}
-    ${product_price}=    Get Text    ${checkout_summary_product_p_l}
-    ${subtotal_without_currency}=    Set Variable    ${subtotal.replace('$', '')}
-    ${product_price_without_currency}=    Set Variable    ${product_price.replace('$', '')}
-    ${expected_subtotal}=    Evaluate    ${product_price_without_currency} * ${${os_qty_just_nr}}
-    Run Keyword And Warn On Failure     Should Be Equal As Numbers    ${expected_subtotal}    ${subtotal_without_currency}
+Verify the invalid fields validation on Shipping Address step for EU
+    Enter invalid Shipping details        io.com    000    $    ---
+    Click on Continue To Payment button
+    Run Keyword And Warn On Failure     Wait Until Element Is Visible      ${shipping_email_empty_err_l}      5s
+    Run Keyword And Warn On Failure     Element Text Should Be    ${shipping_email_empty_err_l}    ${shipping_email_empty_err}
+    Run Keyword And Warn On Failure     Wait Until Element Is Visible      ${shipping_phone_empty_err_l}   5s
+    Run Keyword And Warn On Failure     Element Text Should Be    ${shipping_phone_empty_err_l}    ${shipping_phone_invalid_err}
+    Run Keyword And Warn On Failure     Wait Until Element Is Visible      ${shipping_city_empty_err_l}   5s
+    Run Keyword And Warn On Failure     Element Text Should Be    ${shipping_city_empty_err_l}    ${shipping_city_invalid_err}
+    Run Keyword And Warn On Failure     Wait Until Element Is Visible      ${shipping_zip_empty_err_l}     5s
+    Run Keyword And Warn On Failure     Element Text Should Be    ${shipping_zip_empty_err_l}    ${shipping_zip_invalid_err}

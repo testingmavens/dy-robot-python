@@ -1,5 +1,5 @@
 *** Variables ***
-# 02_Checkout
+# Checkout
 ${checkout_signin_l}                         css:.express-checkout div+.btn-primary
 ${checkout_email_l}                          css:#email
 ${checkout_pwd_l}                            css:#password
@@ -35,8 +35,7 @@ ${expiration_year_label}                     css:.selectric-expirationYear .labe
 ${expiration_year}                           css:.selectric-expirationYear li[data-index="3"]
 ${security_code}                             css:#securityCode
 ${payment_section_l}                         css:.card #paymentSection
-${payment_submit_cc_l}                       css:#showSubmitPayment
-${payment_submit_cceu_l}                     css:#btnPay
+${payment_submit_cc_l}                       css:#showSubmitPayment .js-cc-label
 ${payment_submit_paypal_l}                   css:#payPalOption .btn
 ${payment_submit_zero_order_l}               css:#showSubmitPayment .js-gc-fully-paid-cta
 ${payment_preselected_cc_l}                  css:#creditCardLink[aria-expanded="true"]
@@ -90,26 +89,34 @@ ${billing_email}                            css:.billing-address-block .email
 ${billing_fn}                               css:#billingFirstName
 ${billing_ln}                               css:#billingLastName
 ${billing_phone}                            css:.billing-address-block .phone
-${billing_address_one}                      css:#billingAddressOne
+${billing_address_one}                      css:#billingAddressOne	
 ${billing_address_two}                      css:#billingAddressTwo
 ${billing_city}                             css:#billingAddressCity
 ${billing_state}                            css:.#selectric-billingState
 ${billing_state_lbl}                        css:.billing-address-block .selectric-shippingState .label
 ${billing_zip}                              css:#billingZipCode
 
-###Shipping Page- US, CN
+###Shipping Page
 ${shipping_stage}                            css:[data-checkout-stage="shipping"]
 ${shipping_email}                            css:#email-guest-subscribe
+${shipping_email_entered_l}                  css:#email-guest-subscribe.text-entered
 ${shipping_fn}                               css:#shippingFirstNamedefault
+${shipping_fn_entered_l}                     css:#shippingFirstNamedefault.text-entered
 ${shipping_ln}                               css:#shippingLastNamedefault
+${shipping_ln_entered_l}                     css:#shippingLastNamedefault.text-entered
 ${shipping_phone}                            css:#shippingPhoneNumberdefault
+${shipping_phone_entered_l}                  css:#shippingPhoneNumberdefault.text-entered
 ${shipping_address_one}                      css:#shippingAddressOnedefault
+${shipping_address_one_entered_l}            css:#shippingAddressOnedefault.text-entered
 ${shipping_address_two}                      css:input.shippingAddressTwo
 ${shipping_city}                             css:#shippingAddressCitydefault
+${shipping_city_entered_l}                   css:#shippingAddressCitydefault.text-entered
 #${shipping_state}                           css:#shippingStatedefault
 ${shipping_state}                            css:.selectric-shippingState
 ${shipping_state_lbl}                        css:.shipping-address-block .selectric-shippingState .label
+${shipping_state_selected_l}                 css:.dwfrm_shipping_shippingAddress_addressFields_states_stateCode .label
 ${shipping_zip}                              css:#shippingZipCodedefault
+${shipping_zip_entered_l}                    css:#shippingZipCodedefault.text-entered
 ${submit_shipping_l}                         css:[value='submit-shipping']
 ${shipping_show_verify_l}                    css:div.show#showVerifiedAddressesModal h4
 ${shipping_address_zero_l}                   css:label[for="address-0"]
@@ -130,33 +137,11 @@ ${shipping_addr1_empty_err_l}                css:#defaultAddressLine1
 ${shipping_city_empty_err_l}                 css:#defaultCity
 ${shipping_state_empty_err_l}                css:#defaultState
 ${shipping_zip_empty_err_l}                  css:#defaultZipCode
+${shipping_back_to_cart_l}                   css:.d-none .continue-shopping-link
 ${dqe_enabled}                               css:.pac-container .pac-item-query
 ${dqe_enabled_lbl}                           css:.pac-container .pac-item-query span
 ${dqe_enabled_list}                          css:.pac-container .pac-item
 ${dqe_disabled}                              css:.pac-container[style*="display: none"]
-${shipping_method_message_l}                 xpath://input[@type='radio' and contains(@id,'shippingMethod') and @checked]//parent::div//span[@class='text-muted arrival-time']
-
-
-###Billing Form - UK, FR
-${billing_fn_eu}                               css:#CheckoutData_BillingFirstName
-${billing_ln_eu}                               css:#CheckoutData_BillingLastName
-${billing_email_eu}                            css:#CheckoutData_Email
-${billing_country_eu}                          css:#BillingCountryID
-${billing_phone_eu}                            css:#shippingPhoneNumberdefault
-${billing_address_one_eu}                      css:#CheckoutData_BillingAddress1
-${billing_address_two_eu}                      css:#CheckoutData_BillingAddress2
-${billing_city_eu}                             css:#BillingCity
-${billing_zipCode_eu}                          css:#BillingZIP
-${billing_phonenumber_eu}                      css:#CheckoutData_BillingPhone
-
-###Payment Form - UK,FR
-${payment_section_header}                     xpath://h4[text()='Payment']
-${cardnumber_eu}                              css:#cardNum
-${expiry_month_eu}                            css:#cardExpiryMonth
-${expiry_year_eu}                             css:#cardExpiryYear
-${cvv_eu}                                     css:#cvdNumber
-${payment_button_eu}                          css:#btnPay
-
 
 ###Billing
 ${billing_same_as_shipping}                  css:#useDefaultShipping
@@ -195,9 +180,6 @@ ${oc_create_acc_title_l}        css:.checkout-right-container p
 ${oc_create_acc_pwd_l}          css:#newPassword
 ${oc_create_acc_submit_l}       css:.password-submit
 ${create_acc_err_l}             css:#newPassword+label+i+div
-
-###Order confirmation EU
-${order_confirmation_header_eu}            xpath://h2[text()='Order Confirmation']
 
 ###PDP
 ${pdp_product_name_l}                      css:h1.product-name
@@ -257,17 +239,34 @@ ${pdp_badge_l}                             css:.primary-images p.js-product-badg
 ###Cart
 ${minicart_icon_l}                           css:.d-none .minicart-link
 ${minicart_view_bag_l}                       css:.view-cart-button a
-${minicart_close_l}                          css:.minicart .close
+${minicart_close_l}                          xpath://button[@class='close pull-right js-close-mini-cart icon-close-thick']
 ${minicart_empty_close_l}                    css:.empty-minicart-header .close svg
-${cart_checkout_l}                           xpath:(//a[@data-event-value='continue_checkout'])[1]
+${minicart_title_l}                          css:.show .minicart-title
+${minicart_prod_img_l}                       css:.show .product-image
+${minicart_view_cart_l}                      css:.show .btn-view-cart
+${minicart_checkout_btn_l}                   css:.show .checkout-btn
+${minicart_nr_of_items_l}                    css:.d-none .minicart-quantity
+${cart_checkout_l}                           css:#checkout-form a[href*="checkout"]
 ${cart_coupon_input_l}                       css:#couponCode
 ${cart_coupon_submit_l}                      css:.promo-code-btn
 ${cart_coupon_err_l}                         css:#couponCode+label
 ${cart_page_data_action_l}                   css:[data-action="Cart-Show"]
+${cart_page_title_l}                         css:.page-title
+${cart_plus_qty_l}                           css:.d-none .cart-quantity-form .qty-add
+${cart_qty_input_l}                          css:.d-none .cart-quantity-form .quantity
+${cart_success_msg_l}                        css:.js-status-text a
+${cart_rem_prod_one_l}                       css:.card:nth-child(1) .d-none .remove-product
+${cart_wish_prod_one_l}                      css:.card:nth-child(1) .d-none a[href*="Wishlist-AddProduct"]
+${cart_size_prod_one_l}                      css:.card:nth-child(1) .line-item-attributes span+span
+${cart_quick_edit_l}                         css:.card [data-event-value="Quick Edit"]
+${cart_quick_edit_show_l}                    css:#editProductModal h1
+${cart_grand_total_l}                        css:.totals #grandTotal
 
 ###Minicart
 ${minicart_checkout_l}                         css:a[href*='checkout']
 ${minicart_modal}                              css:.popover-bottom
+${minicart_price_line_l}                       css:.show .line-item-total-price-amount
+${minicart_subtotal_price_l}                   css:.show .sub-total
 
 ###Affirm
 ${affirm_link_l}                             css:#affirmLink
@@ -366,9 +365,9 @@ ${myA_card_state_err_l}                      css:.show#addPayment .selectric-inv
 #StoreLocator
 ${store_location}                           css:#store-postal-code
 ${store_search_button}                      css:.btn-storelocator-search
-${store_phone_number}                       xpath:(//div[@class='card-store'])[1]//address/span/a
-${store_address}                            xpath:(//div[@class='card-store'])[1]//address
-${store_img}                                xpath:(//div[@class='card-store'])[1]//img
+${store_phone_number}                       xpath://*[@id="269026"]//address/span/a
+${store_address}                            xpath://*[@id="269026"]//address
+${store_img}                                xpath://*[@id="269026"]//img
 ${store_img_src}                            xpath://img[@alt="David Yurman - Glendale"]
 ${store_form}                               css:.store-locator-forms
 ${authorized_address}                       xpath://*[@id="900265"]//address
@@ -379,7 +378,7 @@ ${distance_dropdown_button}                 css:.selectric
 ${service_ul}                               xpath://*[@id="269010"]//ul
 ${view_store_button}                        xpath://*[@id="269026"]//a[contains(.,'View Store')]
 ${view_store_name}                          css:.store-name
-${view_store_address}                       xpath://*[@class="store-locator-details store-bottom"]//address
+${view_store_address}                       xpath://*[@class="store-locator-details store-bottom"]//address 
 ${view_store_hours}                         xpath://*[@class="store-locator-details store-bottom"]//*[@class="store-info-block store-hours store-text store-open-hours-state"]//table
 ${map_pin_position}                         xpath=//div[@title="David Yurman - Glendale"]
 ${map_pin_dialog}                           xpath=//div[@role="dialog"]
@@ -395,8 +394,8 @@ ${home_cart_show_l}                         css:[data-action="Cart-Show"]
 ${home_login_show_l}                        css:[data-action='Login-Show']
 ${home_login_icon_l}                        css:.icon-login
 ${home_choose_country_l}                    css:footer #js-choosecountry
-${home_csc_popup_l}                         css:#globale_csc_popup h1
-${home_csc_popup_close_l}                   css:#globale_csc_popup #closeSign
+${home_csc_popup_l}                         xpath://a[text()='Choose Another Country ']
+${home_csc_popup_close_l}                   xpath:(//button[@aria-label='Close'])[3]
 ${home_fav_uns_l}                           css:.icon-favorite-unselected
 ${home_show_wishlist_l}                     css:[data-action='Wishlist-Show']
 ${home_wishlist_count_l}                    css:.js-wishlist-count
@@ -427,27 +426,27 @@ ${check_balance_modal_gc_number}            css=#giftCertID
 ${check_balance_modal_gc_pin}               css=#giftCertPin
 ${check_balance_modal_gc_button}            css=#balanceCheckbtn
 ${check_balance_modal_gc_balance}           css=#gcBalanceAmount
-${payment_gift_card_apply_button}           css=#add-gift-card-btn
+${payment_gift_card_apply_button}           css=#add-gift-card-btn 
 ${payment_gift_card_expand_button}          xpath=//a[@href="#giftCardBlockInner"]
-${order_confirmation_gift_card_value}        xpath=//div[@class="js-gift-card-payments-summary"]//p[@class="text-right"]
+${order_confirmation_gift_card_value}        xpath=//div[@class="js-gift-card-payments-summary"]//p[@class="text-right"] 
 ${order_confirmation_gift_card_text}        xpath=//div[@class="js-gift-card-payments-summary"]//p[@class="order-receipt-label"]
 
-# GIFT CARD
+# GIFT CARD 
 ${gift_card_pdp_fn}                             css:#recipientFirstName
 ${gift_card_pdp_ln}                             css:#recipientLastName
 ${gift_card_pdp_email}                          css:#recipientEmailAddress
 ${gift_card_pdp_sender}                         css:#senderName
 ${gift_card_checkout_details}                   css:.virtual-gift-text
+${gift_card_message}                            xpath://textarea[@id='giftMessageOrder']
 
-
-###02_Checkout BOPIS
+###Checkout BOPIS
 ${guest_bopis_email}                            css:#guest-subscribe-store-pickup
-${guest_bopis_fn}                               css:.pickupFirstName
+${guest_bopis_fn}                               css:.pickupFirstName 
 ${guest_bopis_ln}                               css:.pickupLastName
 ${guest_bopis_phone}                            css:.pickupPhoneNumber
 
 ###PDP BOPIS
-${bopis_modal}                                  css:#pickupInStore
+${bopis_modal}                                  css:#pickupInStore 
 ${store_pickup_button}                          css:.pickup-in-store-btn-modal
 ${address_pickup_button}                        css:.address-pickup-btn
 
@@ -464,7 +463,7 @@ ${store_locator_search_btn}                     css:.btn-search
 ${store_locator_available_store}                css:#storesList .store-result-item .pickup-in-store
 
 
-#Billing
+#Billing 
 ${billing_address_checkout}                     css:.billing-summary-wrapper .address-summary
 ${billing_payment_method_checkout}              css:.billing-summary-wrapper .payment-summary-bottom
 
@@ -478,7 +477,7 @@ ${register_email_field}                         css:#registration-form-email
 ${register_confirm_email_field}                 css:#registration-form-email-confirm
 ${register_password_field}                      css:#registration-form-password
 ${register_confirm_password_field}              css:#registration-form-password-confirm
-${login_button}                                 css:#btnLoginSubmit
+${login_button}                                 css:#btnLoginSubmit 
 ${login_username_field}                         css:#login-form-email
 ${login_password_field}                         css:#login-form-password
 ${account_container}                            css:.account-container-nav
@@ -496,6 +495,204 @@ ${register_email_err}                           css:#form-email-error
 ${register_confirm_email_err}                   css:#form-email-confirm-error
 ${register_password_err}                        css:#form-password-error
 ${register_confirm_password_err}                css:#form-password-confirm-error
+${change_pass_link}                             css:.change-pass > a
+${current_password_locator}                     css:#changePasswordContainer #currentPassword
+${new_password_locator}                         css:#newPassword
+${confirm_password_locator}                     css:#newPasswordConfirm
+${submit_button}                                css:.password-submit
+${header_icon_account}                          css:.header-icon-account > svg
+${logout_link}                                  css:.popover a[href*='Logout']
+${login_error_message}                          css:.alert-danger
+${change_email_link}                            css:.change-email > a
+${new_email_locator}                            css:#newEmail
+${password_locator}                             css:#changeEmailContainer #currentPassword
+${save_email_button}                            css:#btnUpdateEmailSubmit
+${change_email_success_message}                 css:.change-email-success-message
+${password_check_personal_info_chars}           css:.six-characters
+${password_check_personal_info_uppercase}       css:.capital-lowercase
+${password_check_personal_info_lowercase}       css:.capital-lowercase
+${password_check_personal_info_number}          css:.one-number
+${password_check_personal_info_space}           css:.no-spaces
+${password_check_personal_info_email}           css:.no-email
+${password_check_personal_info_specialchar}     css:.special-character
+${first_name_personal_info_locator}             css:#dwfrm_profile #firstName
+${last_name_personal_info_locator}              css:#dwfrm_profile #lastName
+${birthday_personal_info_locator}               css:#dwfrm_profile #birthday
+${anniversary_personal_info_locator}            css:#dwfrm_profile #anniversary
+${save_personal_info_button}                    css:#dwfrm_profile .btn-save
+${invalid_feedback}                             css:.invalid-feedback
+${page_title_personal_info}                     css:.page-title
+
+#STATIC PAGES
+${about_us_footer}                                      xpath=//a[contains(text(), 'About Us')]
+${about_us_title_locator}                               css:.experience-layouts-container .pd-text.d-none
+${about_us_subtitle_locator}                            css:.hero-heading .d-none
+${static_page_accordion}                                css:.accordion-button
+${static_page_text_visible_locator}                     css:.collapse.show
+${contact_customer_care_info_title_locator}             css:.d-none .cs-care-title
+${contact_customer_care_info_subtitle_locator}          css:.d-none .cs-care-option
+
+##Header
+${logo_home}                                           xpath:(//a[@title='David Yurman Home'])[1]
+
+##registration page locators
+${new_customer_heading}              xpath://h2[contains(text(),'New Customer')]
+${register_button_regPage}           xpath://button[@id='btnRegistrationSubmit']
+${first_name_textField_reg}              xpath://input[@id='registration-form-fname']
+${last_name_textField_reg}               xpath://input[@id='registration-form-lname']
+${email_textField_reg}                   xpath://input[@id='registration-form-email']
+${retype_email_textField_reg}            xpath://input[@id='registration-form-email-confirm']
+${password_textField_reg}                xpath://input[@id='registration-form-password']
+${retype_password_textField_reg}         xpath://input[@id='registration-form-password-confirm']
+${first_name_placeHolder_reg}            xpath://label[@for='registration-form-fname']
+${last_name_placeHolder_reg}             xpath://label[@for='registration-form-lname']
+${email_placeHolder_reg}                 xpath://label[@for='registration-form-email']
+${retype_email_placeHolder_reg}          xpath://label[@for='registration-form-email-confirm']
+${password_placeHolder_reg}              xpath://label[@for='registration-form-password']
+${retype_password_placeHolder_reg}       xpath://label[@for='registration-form-password-confirm']
+${registration_form_indicator_reg}       xpath://div[contains(@class,'form-indicator')]
+${password_requirements_button_reg}      xpath://a[@role='button' and @data-toggle='collapse' and contains(text(),' Password Requirements')]
+${password_requirements_subHeading_reg}  xpath://div[@class='content-asset']/p[contains(text(),'Please ensure your password:')]
+${password_requirement_1_reg}            xpath://li[@class='six-characters']
+${password_requirement_2_reg}            xpath://li[@class='capital-lowercase']
+${password_requirement_3_reg}            xpath://li[@class='one-number']
+${password_requirement_4_reg}            xpath://li[@class='no-spaces']
+${password_requirement_5_reg}            xpath://li[@class='no-email']
+${password_requirement_6_reg}            xpath://li[@class='special-character']
+${add_to_email_reg}                      xpath://label[@for='add-to-email-list']
+${first_name_validation_reg}             xpath://div[@id='form-fname-error']
+${last_name_validation_reg}              xpath://div[@id='form-lname-error']
+${email_validation_reg}                  xpath://div[@id='form-email-error']
+${retype_email_validation_reg}           xpath://div[@id='form-email-confirm-error']
+${password_validation_reg}               xpath://div[@id='form-password-error']
+${retype_password_validation_reg}        xpath://div[@id='form-password-confirm-error']
+
+###Password requirements checked and unchecked
+#${minimum_length_requirement_checked}         xpath://ul[@class='passwordList passwordSuccess']/li[@class='six-characters checked']
+#${minimum_length_requirement_unchecked}       xpath://ul[@class='passwordList passwordSuccess']/li[@class='six-characters']
+#${capital_lowercase_requirement_checked}     xpath://ul[@class='passwordList passwordSuccess']/li[@class='capital-lowercase checked']
+#${capital_lowercase_requirement_unchecked}   xpath://ul[@class='passwordList passwordSuccess']/li[@class='capital-lowercase']
+#${one_number_requirement_checked}            xpath://ul[@class='passwordList passwordSuccess']/li[@class='one-number checked']
+#${one_number_requirement_unchecked}          xpath://ul[@class='passwordList passwordSuccess']/li[@class='one-number']
+#${no_spaces_requirement_checked}             xpath://ul[@class='passwordList passwordSuccess']/li[@class='no-spaces checked']
+#${no_spaces_requirement_unchecked}           xpath://ul[@class='passwordList passwordSuccess']/li[@class='no-spaces']
+#${no_email_requirement_checked}              xpath://ul[@class='passwordList passwordSuccess']/li[@class='no-email checked']
+#${no_email_requirement_unchecked}            xpath://ul[@class='passwordList passwordSuccess']/li[@class='no-email']
+#${special_character_requirement_checked}     xpath://ul[@class='passwordList passwordSuccess']/li[@class='special-character checked']
+#${special_character_requirement_unchecked}   xpath://ul[@class='passwordList passwordSuccess']/li[@class='special-character']
+
+##registration page text/messages
+${first_name_placeHolderValue}           First Name
+${last_name_placeHolderValue}            Last Name
+${email_placeHolderValue}                Email
+${retype_email_placeHolderValue}         Retype Email Address
+${password_placeHolderValue}             Password
+${retype_password_placeHolderValue}      Retype Password
+${registration_form_indicatorValue}      * Indicates required fields
+${password_requirement_1_value}          Is at least six characters in length
+${password_requirement_2_value}          Contains at least one capital letter and one lowercase letter
+${password_requirement_3_value}          Contains at least one number
+${password_requirement_4_value}          Does not contain spaces
+${password_requirement_5_value}          Does not contain your email address
+${password_requirement_6_value}          Contains at least one special character (f.ex. !#$£€%)
+${add_to_emailValue}                     Sign up to receive email updates from David Yurman about the latest collections and news. Unsubscribe at any time. See our Privacy Policy for details.
+${first_name_validationValue}            Please enter your first name.
+${last_name_validationValue}             Please enter your last name.
+${email_validationValue}                 Please enter a valid email address
+${retype_email_validationValue}          Please enter a valid email address
+${password_validationValue}              Please enter a password
+${retype_password_validationValue}       Please enter a password
+${already_existing_user_validation}      User with that email address already exists.
+${email_mismatch_validation}             Please enter the same value again.
+${password_requirement_doesnt_match}     Sorry, the provided password does not match the required constraints.
+${password_requirement_minimum_length}   This field needs 6 to 255 characters
 
 
-${primary_name_locator}                       xpath://span[@class='product-name--title js-primary-title']
+##Login OR Registration page
+##Login Section
+${account_registration_header}             xpath://h1[contains(text(),'Account Registration')]
+${registered_customer_subHeading}          xpath://h2[contains(text(),'Registered Customers')]
+${registered_customer_messageElement}      xpath://h2[contains(text(),'Registered Customers')]//following-sibling::p
+${login_form_email_textField}              xpath://input[@id='login-form-email']
+${login_form_email_placeHolderElement}     xpath://label[@for='login-form-email']
+${login_form_password_textField}           xpath://input[@id='login-form-password']
+${login_form_password_placeHolderElement}  xpath://label[@for='login-form-password']
+${login_email_toolTip}                     xpath://i[@class='tooltip-icon']
+${forgot_password_link}                    xpath:(//u[contains(text(),'Forgot Your Password?')])[2]
+${login_button}                            xpath://button[@id='btnLoginSubmit']
+${login_form_email_error}                  xpath://div[@id='form-email-error']
+${login_form_password_error}               xpath://div[@id='form-password-error']
+
+##Register section
+${new_customer_heading}         xpath://h2[contains(text(),'New Customer')]
+${new_customer_messageElement}  xpath://h2[contains(text(),'New Customer')]//following-sibling::p
+${faster_check_out}             xpath:(//div[@class='content-asset'])[1]/ul/li[1]
+${access_order}                 xpath:(//div[@class='content-asset'])[1]/ul/li[2]
+${view_online}                  xpath:(//div[@class='content-asset'])[1]/ul/li[3]
+${add_items}                    xpath:(//div[@class='content-asset'])[1]/ul/li[4]
+
+##Text/Messages - New Customer section
+${new_customer_messageText}   Register with David Yurman for the following benefits:
+${faster_check_out_message}   Faster checkout
+${access_order_message}       Access your order status
+${view_online_message}        View online order history
+${add_items_message}          Add items to your wish list and share
+
+
+##My Account Page page
+${my_account_title}             xpath://h1[contains(text(),'Account Registration')]
+${register_button}              xpath://a[text()='Register']
+${address_book_header}          xpath://h2[text()='Address Book']
+${add_address_button}           xpath://a[@aria-label='Add a New Address']
+
+
+##registration page locators
+${new_customer_heading}              xpath://h2[contains(text(),'New Customer')]
+${register_button_regPage}           xpath://button[@id='btnRegistrationSubmit']
+${first_name_textField}              xpath://input[@id='registration-form-fname']
+${last_name_textField}               xpath://input[@id='registration-form-lname']
+${email_textField}                   xpath://input[@id='registration-form-email']
+${retype_email_textField}            xpath://input[@id='registration-form-email-confirm']
+${password_textField}                xpath://input[@id='registration-form-password']
+${retype_password_textField}         xpath://input[@id='registration-form-password-confirm']
+${first_name_placeHolder}            xpath://label[@for='registration-form-fname']
+${last_name_placeHolder}             xpath://label[@for='registration-form-lname']
+${email_placeHolder}                 xpath://label[@for='registration-form-email']
+${retype_email_placeHolder}          xpath://label[@for='registration-form-email-confirm']
+${password_placeHolder}              xpath://label[@for='registration-form-password']
+${retype_password_placeHolder}       xpath://label[@for='registration-form-password-confirm']
+${registration_form_indicator}       xpath://div[contains(@class,'form-indicator')]
+${password_requirements_button}      xpath://a[@role='button' and @data-toggle='collapse' and contains(text(),' Password Requirements')]
+${password_requirements_subHeading}  xpath://div[@class='content-asset']/p[contains(text(),'Please ensure your password:')]
+${password_requirement_1}            xpath://li[@class='six-characters']
+${password_requirement_2}            xpath://li[@class='capital-lowercase']
+${password_requirement_3}            xpath://li[@class='one-number']
+${password_requirement_4}            xpath://li[@class='no-spaces']
+${password_requirement_5}            xpath://li[@class='no-email']
+${password_requirement_6}            xpath://li[@class='special-character']
+${add_to_email}                      xpath://label[@for='add-to-email-list']
+${first_name_validation}             xpath://div[@id='form-fname-error']
+${last_name_validation}              xpath://div[@id='form-lname-error']
+${email_validation}                  xpath://div[@id='form-email-error']
+${retype_email_validation}           xpath://div[@id='form-email-confirm-error']
+${password_validation}               xpath://div[@id='form-password-error']
+${retype_password_validation}        xpath://div[@id='form-password-confirm-error']
+
+##Password requirements checked and unchecked
+${minimum_length_requirement_checked}         xpath://ul[@class='passwordList']/li[@class='six-characters checked']
+${minimum_length_requirement_unchecked}       xpath://ul[@class='passwordList']/li[@class='six-characters']
+${capital_lowercase_requirement_checked}     xpath://ul[@class='passwordList']/li[@class='capital-lowercase checked']
+${capital_lowercase_requirement_unchecked}   xpath://ul[@class='passwordList']/li[@class='capital-lowercase']
+${one_number_requirement_checked}            xpath://ul[@class='passwordList']/li[@class='one-number checked']
+${one_number_requirement_unchecked}          xpath://ul[@class='passwordList']/li[@class='one-number']
+${no_spaces_requirement_checked}             xpath://ul[@class='passwordList']/li[@class='no-spaces checked']
+${no_spaces_requirement_unchecked}           xpath://ul[@class='passwordList']/li[@class='no-spaces']
+${no_email_requirement_checked}              xpath://ul[@class='passwordList']/li[@class='no-email checked']
+${no_email_requirement_unchecked}            xpath://ul[@class='passwordList']/li[@class='no-email']
+${special_character_requirement_checked}     xpath://ul[@class='passwordList']/li[@class='special-character checked']
+${special_character_requirement_unchecked}   xpath://ul[@class='passwordList']/li[@class='special-character']
+
+
+${shipping_method_message_l}                 xpath://input[@type='radio' and contains(@id,'shippingMethod') and @checked]//parent::div//span[@class='text-muted arrival-time']
+
+
