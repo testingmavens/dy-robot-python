@@ -278,8 +278,10 @@ Remove currency and comma from price
   
   
 Close dev tools icon
-   Select Frame    xpath:(//iframe[1])[2]
+   Select Frame    xpath://iframe[@title='Customer Service Chat']
+   Select Frame    xpath://iframe[@id='DW-SFToolkit']
    Click by JS    xpath://div[@class='x-panel-body x-panel-body-noheader' and @id='ext-gen16']
+   Unselect Frame
    Unselect Frame
 
 
