@@ -17,7 +17,7 @@ Click on Paypal button from Page
     IF    "${page}" == "identification"
         Wait Until Page Contains Element    ${paypal_idntf_btn_l}    30s    Paypal button is not yet visible
     END
-    Select Frame    ${paypal_iframe_l}
+    Select Frame    xpath:(//iframe[@title='PayPal'])[1]
     Wait Until Page Contains Element    ${paypal_btn_container_l}    30s    Paypal button is not yet visible
     CommonWeb.Scroll and Click    ${paypal_btn_container_l}
     Sleep    10s    #to be improved
@@ -72,9 +72,6 @@ Check Info Texts During Checkout
     CommonWeb.Check and Click    ${checkout_info_modal_close_l}
     Wait Until Element Is Not Visible    ${checkout_info_modal_title_l}    10s    Info Modal is still visible
 
-
-
-
 Hover over Minicart
     Mouse Over    ${minicart_icon_l}
 
@@ -121,3 +118,9 @@ Capture product secondary name from checkout
     Scroll Element Into View    xpath://span[@class='line-product-description']
     ${checkout_product_secondary_name}    Get Text    xpath://span[@class='line-product-description']
     Set Test Variable    ${checkout_product_secondary_name}    ${checkout_product_secondary_name}
+
+Sign in during checkout for EU
+    CommonWeb.Check and Input text    xpath://input[@id='login-form-email']     ${REGISTERED_email}
+    CommonWeb.Check and Input text    xpath://input[@id='login-form-password']  ${REGISTERED_pwd}
+    CommonWeb.Check and Click    xpath://button[@id='btnLoginSubmit']
+    Run Keyword And Warn On Failure   Element Should Contain    xpath://input[@id='CheckoutData_Email']   ${REGISTERED_email}

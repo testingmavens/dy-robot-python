@@ -1,5 +1,5 @@
 *** Settings ***
-Test Setup        Run Keywords    Open website   Read Data From JSON File
+Test Setup        Run Keywords    Open website   Read Data From JSON File  Close dev tools icon
 Test Teardown     Run Keywords    Close All Browsers
 Force Tags        prod    automation
 Library           SeleniumLibrary    screenshot_root_directory=EMBED

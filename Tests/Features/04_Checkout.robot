@@ -1,5 +1,5 @@
 *** Settings ***
-Test Setup        Run Keywords    Open website   Read Data From JSON File
+Test Setup        Run Keywords    Open website   Read Data From JSON File  Close dev tools icon
 Test Teardown     Run Keywords    Close All Browsers
 Force Tags        Regression    automation
 Library           SeleniumLibrary    screenshot_root_directory=EMBED
@@ -48,6 +48,7 @@ Checkout with Credit Card - Visa
     Generate Timestamp Email
    IF   '${shopLocale}' in ['US','CN']
     Click on Checkout button from Cart page
+    Sign in during checkout
     Compare item details in cart with checkout
     Enter valid Shipping details    ${guest_valid}    ${FIRST_NAME}   ${LAST_NAME}   ${ADDRESS}   ${ADDRESS2}   ${ZIP}   ${PHONE}
     Select Delivery    2-day
@@ -61,9 +62,10 @@ Checkout with Credit Card - Visa
    END
    IF    '${shopLocale}' in ['UK','FR','GR','IT']
     Click on Checkout button from Cart page for EU
-    Click checkout as guest button
+    Sign in during checkout for EU
     Verify if Order Summary data is correct for EU    5    1
-    Enter valid Shipping details for EU    ${guest_valid}    ${FIRST_NAME}   ${LAST_NAME}   ${ADDRESS}   ${ADDRESS2}   ${ZIP}   ${PHONE}  ${CITY}
+    Verify that the shipping information is correct on Payment page for EU
+    Fill remaining shipping details for EU
     Enter payment details for EU    ${visa_number}    ${card_exp}    ${csv}    ${card_holder}
     Click on Place Order CTA for payment for EU    cc
     Order Confirmation page is displayed for EU
@@ -126,6 +128,12 @@ Checkout with Credit Card - Mastercard
     Enter payment details    ${mastercard_number}    ${card_exp}    ${csv}    ${card_holder}
     Click on Place Order CTA for payment    cc
     Order Confirmation page is displayed
+    Verify that Create an Account section is displayed for Guest Order Confirmation page
+    Click on Password field and check that password validation messages are in place
+    Check the empty validation messages for Create Account form within Order Confirmation page
+    Check the validation messages for invalid emails on Create an Account form within Order Confirmation step    ${oc_create_acc_expected_err}    @{invalid_pwds}
+    Create an account from Order Confirmation page
+    Check that the account was created for correct guest email
     END
    IF    '${shopLocale}' in ['UK','FR','GR','IT']
     Click on Checkout button from Cart page for EU
